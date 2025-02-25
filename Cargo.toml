@@ -1,0 +1,14 @@
+[package]
+name = "eztrans-rs"
+version = "0.1.0"
+edition = "2024"
+authors = ["gembleman"]
+license = "MIT"
+description = "FFI bindings for ChangShinSoft's Eztrans software"
+repository = "https://github.com/gembleman/eztrans-rs.git"
+keywords = ["windows", "translation", "eztrans"]
+
+[dependencies]
+thiserror = "2.0"
+windows = { version = "0.60", features = ["Win32_System_LibraryLoader"] }
+encoding_rs = "0.8"
