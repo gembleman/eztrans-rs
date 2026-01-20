@@ -1,5 +1,7 @@
 #![allow(non_camel_case_types)]
 mod error;
+pub mod ipc_protocol;
+pub mod server;
 pub use error::{EzTransError, TransErr};
 
 use std::collections::HashSet;
@@ -11,29 +13,29 @@ use windows::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryA};
 use windows::core::{Error as WindowsError, PCSTR};
 
 // Type definitions for all EzTrans engine functions
-pub type J2K_FreeMem = unsafe extern "stdcall" fn(*mut c_void);
-pub type J2K_GetPriorDict = unsafe extern "stdcall" fn() -> c_int;
-pub type J2K_GetProperty = unsafe extern "stdcall" fn(c_int) -> c_int;
-pub type J2K_Initialize = unsafe extern "stdcall" fn() -> c_int;
-pub type J2K_InitializeEx = unsafe extern "stdcall" fn(*const c_char, *const c_char) -> c_int;
-pub type J2K_ReloadUserDict = unsafe extern "stdcall" fn() -> c_int;
-pub type J2K_SetDelJPN = unsafe extern "stdcall" fn(c_int) -> c_int;
-pub type J2K_SetField = unsafe extern "stdcall" fn(c_int) -> c_int;
-pub type J2K_SetHnj2han = unsafe extern "stdcall" fn(c_int) -> c_int;
-pub type J2K_SetJWin = unsafe extern "stdcall" fn(c_int) -> c_int;
-pub type J2K_SetPriorDict = unsafe extern "stdcall" fn(*const c_char) -> c_int;
-pub type J2K_SetProperty = unsafe extern "stdcall" fn(c_int, c_int) -> c_int;
-pub type J2K_StopTranslation = unsafe extern "stdcall" fn() -> c_int;
-pub type J2K_Terminate = unsafe extern "stdcall" fn() -> c_int;
-pub type J2K_TranslateChat = unsafe extern "stdcall" fn(*const c_char) -> *mut c_char;
-pub type J2K_TranslateFM = unsafe extern "stdcall" fn(*const c_char) -> *mut c_char;
+pub type J2K_FreeMem = unsafe extern "system" fn(*mut c_void);
+pub type J2K_GetPriorDict = unsafe extern "system" fn() -> c_int;
+pub type J2K_GetProperty = unsafe extern "system" fn(c_int) -> c_int;
+pub type J2K_Initialize = unsafe extern "system" fn() -> c_int;
+pub type J2K_InitializeEx = unsafe extern "system" fn(*const c_char, *const c_char) -> c_int;
+pub type J2K_ReloadUserDict = unsafe extern "system" fn() -> c_int;
+pub type J2K_SetDelJPN = unsafe extern "system" fn(c_int) -> c_int;
+pub type J2K_SetField = unsafe extern "system" fn(c_int) -> c_int;
+pub type J2K_SetHnj2han = unsafe extern "system" fn(c_int) -> c_int;
+pub type J2K_SetJWin = unsafe extern "system" fn(c_int) -> c_int;
+pub type J2K_SetPriorDict = unsafe extern "system" fn(*const c_char) -> c_int;
+pub type J2K_SetProperty = unsafe extern "system" fn(c_int, c_int) -> c_int;
+pub type J2K_StopTranslation = unsafe extern "system" fn() -> c_int;
+pub type J2K_Terminate = unsafe extern "system" fn() -> c_int;
+pub type J2K_TranslateChat = unsafe extern "system" fn(*const c_char) -> *mut c_char;
+pub type J2K_TranslateFM = unsafe extern "system" fn(*const c_char) -> *mut c_char;
 /// 알 수 없는 함수
-pub type J2K_TranslateMM = unsafe extern "stdcall" fn(*const c_char) -> *mut c_char;
-pub type J2K_TranslateMMEx = unsafe extern "stdcall" fn(c_int, *const c_char) -> *mut c_char;
+pub type J2K_TranslateMM = unsafe extern "system" fn(*const c_char) -> *mut c_char;
+pub type J2K_TranslateMMEx = unsafe extern "system" fn(c_int, *const c_char) -> *mut c_char;
 /// EHND를 사용하지 않는 번역 함수
-pub type J2K_TranslateMMNT = unsafe extern "stdcall" fn(c_int, *const c_char) -> *mut c_char;
+pub type J2K_TranslateMMNT = unsafe extern "system" fn(c_int, *const c_char) -> *mut c_char;
 /// EHND를 사용하는 번역 함수
-pub type J2K_TranslateMMNTW = unsafe extern "stdcall" fn(c_int, *const u16) -> *mut u16;
+pub type J2K_TranslateMMNTW = unsafe extern "system" fn(c_int, *const u16) -> *mut u16;
 
 /// EzTrans 엔진을 관리하는 구조체
 pub struct EzTransEngine {
@@ -112,8 +114,7 @@ impl EzTransEngine {
             '⒦', '⒧', '⒨', '⒩', '⒪', '⒫', '⒬', '⒭', '⒮', '⒯', '⒰', '⒱', '⒲', '⒳', '⒴', '⒵', '⑴',
             '⑵', '⑶', '⑷', '⑸', '⑹', '⑺', '⑻', '⑼', '⑽', '⑾', '⑿', '⒀', '⒁', '⒂',
         ]
-        .iter()
-        .cloned()
+        .into_iter()
         .collect();
 
         // 엔진 인스턴스 생성
@@ -532,7 +533,7 @@ impl EzTransEngine {
                         // 유효한 16진수면 디코딩
                         if hex.len() == 4 && hex.chars().all(|c| c.is_ascii_hexdigit()) {
                             if let Ok(code) = u32::from_str_radix(&hex, 16) {
-                                if let Some(decoded_char) = std::char::from_u32(code) {
+                                if let Some(decoded_char) = char::from_u32(code) {
                                     output.push(decoded_char);
                                     continue;
                                 }

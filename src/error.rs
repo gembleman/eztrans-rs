@@ -18,14 +18,22 @@ pub enum EzTransError {
     FunctionLoadError(String),
     #[error("Failed to call function: {0}")]
     FunctionCallFailed(String),
+    #[error("Pipe error: {0}")]
+    PipeError(String),
+    #[error("Incomplete read")]
+    IncompleteRead,
+    #[error("Incomplete write")]
+    IncompleteWrite,
+    #[error("Invalid command: {0}")]
+    InvalidCommand(u32),
+    #[error("Windows error: {0}")]
+    WindowsError(#[from] windows::core::Error),
 }
 
 #[derive(Error, Debug, Clone)]
 pub enum TransErr {
     ///TRANSLATE_MMNTW or MMNT returned a null pointer
     NullPointer,
-    ///Translation failed
-    Failed,
     ///EUC-KR decoding failed
     EucKrDecodeFailed,
 }
@@ -33,7 +41,6 @@ impl fmt::Display for TransErr {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             TransErr::NullPointer => write!(f, "TRANSLATE func returned a null pointer"),
-            TransErr::Failed => write!(f, "Translation failed"),
             TransErr::EucKrDecodeFailed => write!(f, "EUC-KR decoding failed"),
         }
     }

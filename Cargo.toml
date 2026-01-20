@@ -4,11 +4,23 @@ version = "0.1.0"
 edition = "2024"
 authors = ["gembleman"]
 license = "MIT"
-description = "FFI bindings for ChangShinSoft's Eztrans software"
+description = "FFI bindings and IPC server for ChangShinSoft's Eztrans software"
 repository = "https://github.com/gembleman/eztrans-rs.git"
 keywords = ["windows", "translation", "eztrans"]
 
 [dependencies]
-thiserror = "2.0"
-windows = { version = "0.60", features = ["Win32_System_LibraryLoader"] }
-encoding_rs = "0.8"
+thiserror = { workspace = true }
+windows = { workspace = true }
+encoding_rs = { workspace = true }
+windows_shared_memory = { path = "../windows_shared_memory" }
+
+[[bin]]
+name = "AnemoneTransProxy32"
+path = "src/bin/proxy.rs"
+
+[[bin]]
+name = "eztrans-shared-memory"
+path = "src/bin/shared_memory.rs"
+
+[dev-dependencies]
+serial_test = "3.2"
