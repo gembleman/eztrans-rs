@@ -1,10 +1,10 @@
 // Named Pipe Server implementation
 
 use std::mem::size_of;
-use windows::core::PCWSTR;
 use windows::Win32::Foundation::{CloseHandle, HANDLE, INVALID_HANDLE_VALUE};
+use windows::Win32::Storage::FileSystem::{FILE_FLAGS_AND_ATTRIBUTES, ReadFile, WriteFile};
 use windows::Win32::System::Pipes::*;
-use windows::Win32::Storage::FileSystem::{ReadFile, WriteFile, FILE_FLAGS_AND_ATTRIBUTES};
+use windows::core::PCWSTR;
 
 use crate::ipc_protocol::*;
 use crate::{EzTransEngine, EzTransError};
@@ -37,15 +37,17 @@ impl TransProxyServer {
                 PCWSTR(pipe_name.as_ptr()),
                 PIPE_ACCESS_DUPLEX,
                 PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
-                1,     // Max instances
-                8192,  // Out buffer size
-                8192,  // In buffer size
-                0,     // Timeout
-                None,  // Security attributes
+                1,    // Max instances
+                8192, // Out buffer size
+                8192, // In buffer size
+                0,    // Timeout
+                None, // Security attributes
             );
 
             if self.pipe_handle == INVALID_HANDLE_VALUE {
-                return Err(EzTransError::PipeError("Failed to create named pipe".to_string()));
+                return Err(EzTransError::PipeError(
+                    "Failed to create named pipe".to_string(),
+                ));
             }
 
             // Wait for client connection
@@ -152,22 +154,29 @@ impl TransProxyServer {
 
         // EzTransEngine 사용 (중복 코드 제거)
         match EzTransEngine::new(&dll_path) {
-            Ok(engine) => {
-                match engine.initialize_ex("CSUSER123455", &dat_path) {
-                    Ok(_) => {
-                        self.engine = Some(engine);
-                        self.initialized = true;
-                        let response = InitializeResponse { status: Status::Success, success: true };
-                        self.write_message(&response)
-                    }
-                    Err(_) => {
-                        let response = InitializeResponse { status: Status::Error, success: false };
-                        self.write_message(&response)
-                    }
+            Ok(engine) => match engine.initialize_ex("CSUSER123455", &dat_path) {
+                Ok(_) => {
+                    self.engine = Some(engine);
+                    self.initialized = true;
+                    let response = InitializeResponse {
+                        status: Status::Success,
+                        success: true,
+                    };
+                    self.write_message(&response)
                 }
-            }
+                Err(_) => {
+                    let response = InitializeResponse {
+                        status: Status::Error,
+                        success: false,
+                    };
+                    self.write_message(&response)
+                }
+            },
             Err(_) => {
-                let response = InitializeResponse { status: Status::Error, success: false };
+                let response = InitializeResponse {
+                    status: Status::Error,
+                    success: false,
+                };
                 self.write_message(&response)
             }
         }
@@ -180,7 +189,9 @@ impl TransProxyServer {
         self.engine = None;
         self.initialized = false;
 
-        let response = GenericResponse { status: Status::Success };
+        let response = GenericResponse {
+            status: Status::Success,
+        };
         self.write_message(&response)
     }
 
@@ -270,7 +281,9 @@ impl TransProxyServer {
             let _ = engine.reload_user_dict();
         }
 
-        let response = GenericResponse { status: Status::Success };
+        let response = GenericResponse {
+            status: Status::Success,
+        };
         self.write_message(&response)
     }
 
@@ -283,11 +296,17 @@ impl TransProxyServer {
 
         let response = if let Some(ref engine) = self.engine {
             match engine.set_property(request.property_id, request.value) {
-                Ok(_) => GenericResponse { status: Status::Success },
-                Err(_) => GenericResponse { status: Status::Error },
+                Ok(_) => GenericResponse {
+                    status: Status::Success,
+                },
+                Err(_) => GenericResponse {
+                    status: Status::Error,
+                },
             }
         } else {
-            GenericResponse { status: Status::NotInitialized }
+            GenericResponse {
+                status: Status::NotInitialized,
+            }
         };
 
         self.write_message(&response)

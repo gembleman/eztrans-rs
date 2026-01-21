@@ -1,8 +1,8 @@
 // Shared Memory Tests
 
-use std::{env, error::Error};
 use eztrans_rs::EzTransEngine;
-use windows_shared_memory::{Client, Server, ReceiveMessage};
+use std::{env, error::Error};
+use windows_shared_memory::{Client, ReceiveMessage, Server};
 
 #[test]
 fn test_shared_memory_translation() -> Result<(), Box<dyn Error>> {

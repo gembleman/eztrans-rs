@@ -1,0 +1,551 @@
+================================================================================
+EzTrans 번역 결과가 일치하는 유니코드 범위
+================================================================================
+
+총 일치하는 문자 수: 186
+총 범위 수: 84
+
+================================================================================
+범위 목록
+================================================================================
+
+1. U+000020
+   블록: Basic Latin
+   샘플:  
+
+2. U+0000A0 - U+0000A3 (4개 문자)
+   블록: Latin-1 Supplement
+   샘플:   ¡ ¢ £
+
+3. U+0000A5 - U+0000A6 (2개 문자)
+   블록: Latin-1 Supplement
+   샘플: ¥ ¦
+
+4. U+0000A9 - U+0000AC (4개 문자)
+   블록: Latin-1 Supplement
+   샘플: © ª « ¬
+
+5. U+0000AE - U+0000B0 (3개 문자)
+   블록: Latin-1 Supplement
+   샘플: ® ¯ °
+
+6. U+0000B2 - U+0000B3 (2개 문자)
+   블록: Latin-1 Supplement
+   샘플: ² ³
+
+7. U+0000B9
+   블록: Latin-1 Supplement
+   샘플: ¹
+
+8. U+0000C0 - U+0000D6 (23개 문자)
+   블록: Latin-1 Supplement
+   샘플: À Á Â Ã Ä Å Æ Ç È É ...
+
+9. U+0000D8 - U+0000F6 (31개 문자)
+   블록: Latin-1 Supplement
+   샘플: Ø Ù Ú Û Ü Ý Þ ß à á ...
+
+10. U+0000F8 - U+0000FF (8개 문자)
+   블록: Latin-1 Supplement
+   샘플: ø ù ú û ü ý þ ÿ
+
+11. U+00029E
+   블록: IPA Extensions
+   샘플: ʞ
+
+12. U+00033A
+   블록: Combining Diacritical Marks
+   샘플: ̺
+
+13. U+000492
+   블록: Cyrillic
+   샘플: Ғ
+
+14. U+0004A1
+   블록: Cyrillic
+   샘플: ҡ
+
+15. U+0004A4
+   블록: Cyrillic
+   샘플: Ҥ
+
+16. U+00210D
+   블록: Letterlike Symbols
+   샘플: ℍ
+
+17. U+002202
+   블록: Mathematical Operators
+   샘플: ∂
+
+18. U+00222B - U+00222C (2개 문자)
+   블록: Mathematical Operators
+   샘플: ∫ ∬
+
+19. U+0022E6
+   블록: Mathematical Operators
+   샘플: ⋦
+
+20. U+00246F - U+002473 (5개 문자)
+   블록: Enclosed Alphanumerics
+   샘플: ⑯ ⑰ ⑱ ⑲ ⑳
+
+21. U+0024B6 - U+0024BE (9개 문자)
+   블록: Enclosed Alphanumerics
+   샘플: Ⓐ Ⓑ Ⓒ Ⓓ Ⓔ Ⓕ Ⓖ Ⓗ Ⓘ
+
+22. U+0024C0 - U+0024C3 (4개 문자)
+   블록: Enclosed Alphanumerics
+   샘플: Ⓚ Ⓛ Ⓜ Ⓝ
+
+23. U+0024C5 - U+0024C8 (4개 문자)
+   블록: Enclosed Alphanumerics
+   샘플: Ⓟ Ⓠ Ⓡ Ⓢ
+
+24. U+0024CA - U+0024CF (6개 문자)
+   블록: Enclosed Alphanumerics
+   샘플: Ⓤ Ⓥ Ⓦ Ⓧ Ⓨ Ⓩ
+
+25. U+002582
+   블록: Block Elements
+   샘플: ▂
+
+26. U+0025EF
+   블록: Geometric Shapes
+   샘플: ◯
+
+27. U+003013
+   블록: CJK Symbols and Punctuation
+   샘플: 〓
+
+28. U+003099 - U+00309A (2개 문자)
+   블록: Hiragana
+   샘플: ゙ ゚
+
+29. U+003232
+   블록: Enclosed CJK Letters and Months
+   샘플: ㈲
+
+30. U+003239
+   블록: Enclosed CJK Letters and Months
+   샘플: ㈹
+
+31. U+0032A4 - U+0032A8 (5개 문자)
+   블록: Enclosed CJK Letters and Months
+   샘플: ㊤ ㊥ ㊦ ㊧ ㊨
+
+32. U+00565B
+   블록: CJK Unified Ideographs
+   샘플: 噛
+
+33. U+005699
+   블록: CJK Unified Ideographs
+   샘플: 嚙
+
+34. U+005BE4
+   블록: CJK Unified Ideographs
+   샘플: 寤
+
+35. U+005CFB
+   블록: CJK Unified Ideographs
+   샘플: 峻
+
+36. U+006766
+   블록: CJK Unified Ideographs
+   샘플: 杦
+
+37. U+0067BB
+   블록: CJK Unified Ideographs
+   샘플: 枻
+
+38. U+0067C0
+   블록: CJK Unified Ideographs
+   샘플: 柀
+
+39. U+006844
+   블록: CJK Unified Ideographs
+   샘플: 桄
+
+40. U+0068CF
+   블록: CJK Unified Ideographs
+   샘플: 棏
+
+41. U+006998
+   블록: CJK Unified Ideographs
+   샘플: 榘
+
+42. U+0069E2
+   블록: CJK Unified Ideographs
+   샘플: 槢
+
+43. U+006A30
+   블록: CJK Unified Ideographs
+   샘플: 樰
+
+44. U+006A46
+   블록: CJK Unified Ideographs
+   샘플: 橆
+
+45. U+006A73
+   블록: CJK Unified Ideographs
+   샘플: 橳
+
+46. U+006A7E
+   블록: CJK Unified Ideographs
+   샘플: 橾
+
+47. U+006AE2
+   블록: CJK Unified Ideographs
+   샘플: 櫢
+
+48. U+006AE4
+   블록: CJK Unified Ideographs
+   샘플: 櫤
+
+49. U+006BD6
+   블록: CJK Unified Ideographs
+   샘플: 毖
+
+50. U+006C3F
+   블록: CJK Unified Ideographs
+   샘플: 氿
+
+51. U+006C5C
+   블록: CJK Unified Ideographs
+   샘플: 汜
+
+52. U+006C6F
+   블록: CJK Unified Ideographs
+   샘플: 汯
+
+53. U+006C86
+   블록: CJK Unified Ideographs
+   샘플: 沆
+
+54. U+006CDA
+   블록: CJK Unified Ideographs
+   샘플: 泚
+
+55. U+006D04
+   블록: CJK Unified Ideographs
+   샘플: 洄
+
+56. U+006D6F
+   블록: CJK Unified Ideographs
+   샘플: 浯
+
+57. U+006D87
+   블록: CJK Unified Ideographs
+   샘플: 涇
+
+58. U+007195
+   블록: CJK Unified Ideographs
+   샘플: 熕
+
+59. U+007F52
+   블록: CJK Unified Ideographs
+   샘플: 罒
+
+60. U+008A51
+   블록: CJK Unified Ideographs
+   샘플: 詑
+
+61. U+009357
+   블록: CJK Unified Ideographs
+   샘플: 鍗
+
+62. U+0093A4
+   블록: CJK Unified Ideographs
+   샘플: 鎤
+
+63. U+0093C6
+   블록: CJK Unified Ideographs
+   샘플: 鏆
+
+64. U+0093DE
+   블록: CJK Unified Ideographs
+   샘플: 鏞
+
+65. U+0093F8
+   블록: CJK Unified Ideographs
+   샘플: 鏸
+
+66. U+009431
+   블록: CJK Unified Ideographs
+   샘플: 鐱
+
+67. U+009445
+   블록: CJK Unified Ideographs
+   샘플: 鑅
+
+68. U+009448
+   블록: CJK Unified Ideographs
+   샘플: 鑈
+
+69. U+00969D
+   블록: CJK Unified Ideographs
+   샘플: 隝
+
+70. U+0096AF
+   블록: CJK Unified Ideographs
+   샘플: 隯
+
+71. U+009733
+   블록: CJK Unified Ideographs
+   샘플: 霳
+
+72. U+00973B
+   블록: CJK Unified Ideographs
+   샘플: 霻
+
+73. U+009743
+   블록: CJK Unified Ideographs
+   샘플: 靃
+
+74. U+00974D
+   블록: CJK Unified Ideographs
+   샘플: 靍
+
+75. U+00974F
+   블록: CJK Unified Ideographs
+   샘플: 靏
+
+76. U+009755
+   블록: CJK Unified Ideographs
+   샘플: 靕
+
+77. U+009857
+   블록: CJK Unified Ideographs
+   샘플: 顗
+
+78. U+009865
+   블록: CJK Unified Ideographs
+   샘플: 顥
+
+79. U+009927
+   블록: CJK Unified Ideographs
+   샘플: 餧
+
+80. U+00999E
+   블록: CJK Unified Ideographs
+   샘플: 馞
+
+81. U+00F929
+   블록: CJK Compatibility Ideographs
+   샘플: 朗
+
+82. U+00F9DC
+   블록: CJK Compatibility Ideographs
+   샘플: 隆
+
+83. U+00FA13 - U+00FA14 (2개 문자)
+   블록: CJK Compatibility Ideographs
+   샘플: 﨓 﨔
+
+84. U+00FA29 - U+00FA2C (4개 문자)
+   블록: CJK Compatibility Ideographs
+   샘플: 﨩 飯 飼 館
+
+
+================================================================================
+Rust 코드 형식 (배열)
+================================================================================
+
+const MATCHED_UNICODE_RANGES: &[(u32, u32)] = &[
+    (0x000020, 0x000020),  // U+000020 (Basic Latin)
+    (0x0000A0, 0x0000A3),  // U+0000A0 - U+0000A3 (Latin-1 Supplement)
+    (0x0000A5, 0x0000A6),  // U+0000A5 - U+0000A6 (Latin-1 Supplement)
+    (0x0000A9, 0x0000AC),  // U+0000A9 - U+0000AC (Latin-1 Supplement)
+    (0x0000AE, 0x0000B0),  // U+0000AE - U+0000B0 (Latin-1 Supplement)
+    (0x0000B2, 0x0000B3),  // U+0000B2 - U+0000B3 (Latin-1 Supplement)
+    (0x0000B9, 0x0000B9),  // U+0000B9 (Latin-1 Supplement)
+    (0x0000C0, 0x0000D6),  // U+0000C0 - U+0000D6 (Latin-1 Supplement)
+    (0x0000D8, 0x0000F6),  // U+0000D8 - U+0000F6 (Latin-1 Supplement)
+    (0x0000F8, 0x0000FF),  // U+0000F8 - U+0000FF (Latin-1 Supplement)
+    (0x00029E, 0x00029E),  // U+00029E (IPA Extensions)
+    (0x00033A, 0x00033A),  // U+00033A (Combining Diacritical Marks)
+    (0x000492, 0x000492),  // U+000492 (Cyrillic)
+    (0x0004A1, 0x0004A1),  // U+0004A1 (Cyrillic)
+    (0x0004A4, 0x0004A4),  // U+0004A4 (Cyrillic)
+    (0x00210D, 0x00210D),  // U+00210D (Letterlike Symbols)
+    (0x002202, 0x002202),  // U+002202 (Mathematical Operators)
+    (0x00222B, 0x00222C),  // U+00222B - U+00222C (Mathematical Operators)
+    (0x0022E6, 0x0022E6),  // U+0022E6 (Mathematical Operators)
+    (0x00246F, 0x002473),  // U+00246F - U+002473 (Enclosed Alphanumerics)
+    (0x0024B6, 0x0024BE),  // U+0024B6 - U+0024BE (Enclosed Alphanumerics)
+    (0x0024C0, 0x0024C3),  // U+0024C0 - U+0024C3 (Enclosed Alphanumerics)
+    (0x0024C5, 0x0024C8),  // U+0024C5 - U+0024C8 (Enclosed Alphanumerics)
+    (0x0024CA, 0x0024CF),  // U+0024CA - U+0024CF (Enclosed Alphanumerics)
+    (0x002582, 0x002582),  // U+002582 (Block Elements)
+    (0x0025EF, 0x0025EF),  // U+0025EF (Geometric Shapes)
+    (0x003013, 0x003013),  // U+003013 (CJK Symbols and Punctuation)
+    (0x003099, 0x00309A),  // U+003099 - U+00309A (Hiragana)
+    (0x003232, 0x003232),  // U+003232 (Enclosed CJK Letters and Months)
+    (0x003239, 0x003239),  // U+003239 (Enclosed CJK Letters and Months)
+    (0x0032A4, 0x0032A8),  // U+0032A4 - U+0032A8 (Enclosed CJK Letters and Months)
+    (0x00565B, 0x00565B),  // U+00565B (CJK Unified Ideographs)
+    (0x005699, 0x005699),  // U+005699 (CJK Unified Ideographs)
+    (0x005BE4, 0x005BE4),  // U+005BE4 (CJK Unified Ideographs)
+    (0x005CFB, 0x005CFB),  // U+005CFB (CJK Unified Ideographs)
+    (0x006766, 0x006766),  // U+006766 (CJK Unified Ideographs)
+    (0x0067BB, 0x0067BB),  // U+0067BB (CJK Unified Ideographs)
+    (0x0067C0, 0x0067C0),  // U+0067C0 (CJK Unified Ideographs)
+    (0x006844, 0x006844),  // U+006844 (CJK Unified Ideographs)
+    (0x0068CF, 0x0068CF),  // U+0068CF (CJK Unified Ideographs)
+    (0x006998, 0x006998),  // U+006998 (CJK Unified Ideographs)
+    (0x0069E2, 0x0069E2),  // U+0069E2 (CJK Unified Ideographs)
+    (0x006A30, 0x006A30),  // U+006A30 (CJK Unified Ideographs)
+    (0x006A46, 0x006A46),  // U+006A46 (CJK Unified Ideographs)
+    (0x006A73, 0x006A73),  // U+006A73 (CJK Unified Ideographs)
+    (0x006A7E, 0x006A7E),  // U+006A7E (CJK Unified Ideographs)
+    (0x006AE2, 0x006AE2),  // U+006AE2 (CJK Unified Ideographs)
+    (0x006AE4, 0x006AE4),  // U+006AE4 (CJK Unified Ideographs)
+    (0x006BD6, 0x006BD6),  // U+006BD6 (CJK Unified Ideographs)
+    (0x006C3F, 0x006C3F),  // U+006C3F (CJK Unified Ideographs)
+    (0x006C5C, 0x006C5C),  // U+006C5C (CJK Unified Ideographs)
+    (0x006C6F, 0x006C6F),  // U+006C6F (CJK Unified Ideographs)
+    (0x006C86, 0x006C86),  // U+006C86 (CJK Unified Ideographs)
+    (0x006CDA, 0x006CDA),  // U+006CDA (CJK Unified Ideographs)
+    (0x006D04, 0x006D04),  // U+006D04 (CJK Unified Ideographs)
+    (0x006D6F, 0x006D6F),  // U+006D6F (CJK Unified Ideographs)
+    (0x006D87, 0x006D87),  // U+006D87 (CJK Unified Ideographs)
+    (0x007195, 0x007195),  // U+007195 (CJK Unified Ideographs)
+    (0x007F52, 0x007F52),  // U+007F52 (CJK Unified Ideographs)
+    (0x008A51, 0x008A51),  // U+008A51 (CJK Unified Ideographs)
+    (0x009357, 0x009357),  // U+009357 (CJK Unified Ideographs)
+    (0x0093A4, 0x0093A4),  // U+0093A4 (CJK Unified Ideographs)
+    (0x0093C6, 0x0093C6),  // U+0093C6 (CJK Unified Ideographs)
+    (0x0093DE, 0x0093DE),  // U+0093DE (CJK Unified Ideographs)
+    (0x0093F8, 0x0093F8),  // U+0093F8 (CJK Unified Ideographs)
+    (0x009431, 0x009431),  // U+009431 (CJK Unified Ideographs)
+    (0x009445, 0x009445),  // U+009445 (CJK Unified Ideographs)
+    (0x009448, 0x009448),  // U+009448 (CJK Unified Ideographs)
+    (0x00969D, 0x00969D),  // U+00969D (CJK Unified Ideographs)
+    (0x0096AF, 0x0096AF),  // U+0096AF (CJK Unified Ideographs)
+    (0x009733, 0x009733),  // U+009733 (CJK Unified Ideographs)
+    (0x00973B, 0x00973B),  // U+00973B (CJK Unified Ideographs)
+    (0x009743, 0x009743),  // U+009743 (CJK Unified Ideographs)
+    (0x00974D, 0x00974D),  // U+00974D (CJK Unified Ideographs)
+    (0x00974F, 0x00974F),  // U+00974F (CJK Unified Ideographs)
+    (0x009755, 0x009755),  // U+009755 (CJK Unified Ideographs)
+    (0x009857, 0x009857),  // U+009857 (CJK Unified Ideographs)
+    (0x009865, 0x009865),  // U+009865 (CJK Unified Ideographs)
+    (0x009927, 0x009927),  // U+009927 (CJK Unified Ideographs)
+    (0x00999E, 0x00999E),  // U+00999E (CJK Unified Ideographs)
+    (0x00F929, 0x00F929),  // U+00F929 (CJK Compatibility Ideographs)
+    (0x00F9DC, 0x00F9DC),  // U+00F9DC (CJK Compatibility Ideographs)
+    (0x00FA13, 0x00FA14),  // U+00FA13 - U+00FA14 (CJK Compatibility Ideographs)
+    (0x00FA29, 0x00FA2C),  // U+00FA29 - U+00FA2C (CJK Compatibility Ideographs)
+];
+
+
+================================================================================
+Python 코드 형식 (리스트)
+================================================================================
+
+MATCHED_UNICODE_RANGES = [
+    (0x000020, 0x000020),  # U+000020 (Basic Latin)
+    (0x0000A0, 0x0000A3),  # U+0000A0 - U+0000A3 (Latin-1 Supplement)
+    (0x0000A5, 0x0000A6),  # U+0000A5 - U+0000A6 (Latin-1 Supplement)
+    (0x0000A9, 0x0000AC),  # U+0000A9 - U+0000AC (Latin-1 Supplement)
+    (0x0000AE, 0x0000B0),  # U+0000AE - U+0000B0 (Latin-1 Supplement)
+    (0x0000B2, 0x0000B3),  # U+0000B2 - U+0000B3 (Latin-1 Supplement)
+    (0x0000B9, 0x0000B9),  # U+0000B9 (Latin-1 Supplement)
+    (0x0000C0, 0x0000D6),  # U+0000C0 - U+0000D6 (Latin-1 Supplement)
+    (0x0000D8, 0x0000F6),  # U+0000D8 - U+0000F6 (Latin-1 Supplement)
+    (0x0000F8, 0x0000FF),  # U+0000F8 - U+0000FF (Latin-1 Supplement)
+    (0x00029E, 0x00029E),  # U+00029E (IPA Extensions)
+    (0x00033A, 0x00033A),  # U+00033A (Combining Diacritical Marks)
+    (0x000492, 0x000492),  # U+000492 (Cyrillic)
+    (0x0004A1, 0x0004A1),  # U+0004A1 (Cyrillic)
+    (0x0004A4, 0x0004A4),  # U+0004A4 (Cyrillic)
+    (0x00210D, 0x00210D),  # U+00210D (Letterlike Symbols)
+    (0x002202, 0x002202),  # U+002202 (Mathematical Operators)
+    (0x00222B, 0x00222C),  # U+00222B - U+00222C (Mathematical Operators)
+    (0x0022E6, 0x0022E6),  # U+0022E6 (Mathematical Operators)
+    (0x00246F, 0x002473),  # U+00246F - U+002473 (Enclosed Alphanumerics)
+    (0x0024B6, 0x0024BE),  # U+0024B6 - U+0024BE (Enclosed Alphanumerics)
+    (0x0024C0, 0x0024C3),  # U+0024C0 - U+0024C3 (Enclosed Alphanumerics)
+    (0x0024C5, 0x0024C8),  # U+0024C5 - U+0024C8 (Enclosed Alphanumerics)
+    (0x0024CA, 0x0024CF),  # U+0024CA - U+0024CF (Enclosed Alphanumerics)
+    (0x002582, 0x002582),  # U+002582 (Block Elements)
+    (0x0025EF, 0x0025EF),  # U+0025EF (Geometric Shapes)
+    (0x003013, 0x003013),  # U+003013 (CJK Symbols and Punctuation)
+    (0x003099, 0x00309A),  # U+003099 - U+00309A (Hiragana)
+    (0x003232, 0x003232),  # U+003232 (Enclosed CJK Letters and Months)
+    (0x003239, 0x003239),  # U+003239 (Enclosed CJK Letters and Months)
+    (0x0032A4, 0x0032A8),  # U+0032A4 - U+0032A8 (Enclosed CJK Letters and Months)
+    (0x00565B, 0x00565B),  # U+00565B (CJK Unified Ideographs)
+    (0x005699, 0x005699),  # U+005699 (CJK Unified Ideographs)
+    (0x005BE4, 0x005BE4),  # U+005BE4 (CJK Unified Ideographs)
+    (0x005CFB, 0x005CFB),  # U+005CFB (CJK Unified Ideographs)
+    (0x006766, 0x006766),  # U+006766 (CJK Unified Ideographs)
+    (0x0067BB, 0x0067BB),  # U+0067BB (CJK Unified Ideographs)
+    (0x0067C0, 0x0067C0),  # U+0067C0 (CJK Unified Ideographs)
+    (0x006844, 0x006844),  # U+006844 (CJK Unified Ideographs)
+    (0x0068CF, 0x0068CF),  # U+0068CF (CJK Unified Ideographs)
+    (0x006998, 0x006998),  # U+006998 (CJK Unified Ideographs)
+    (0x0069E2, 0x0069E2),  # U+0069E2 (CJK Unified Ideographs)
+    (0x006A30, 0x006A30),  # U+006A30 (CJK Unified Ideographs)
+    (0x006A46, 0x006A46),  # U+006A46 (CJK Unified Ideographs)
+    (0x006A73, 0x006A73),  # U+006A73 (CJK Unified Ideographs)
+    (0x006A7E, 0x006A7E),  # U+006A7E (CJK Unified Ideographs)
+    (0x006AE2, 0x006AE2),  # U+006AE2 (CJK Unified Ideographs)
+    (0x006AE4, 0x006AE4),  # U+006AE4 (CJK Unified Ideographs)
+    (0x006BD6, 0x006BD6),  # U+006BD6 (CJK Unified Ideographs)
+    (0x006C3F, 0x006C3F),  # U+006C3F (CJK Unified Ideographs)
+    (0x006C5C, 0x006C5C),  # U+006C5C (CJK Unified Ideographs)
+    (0x006C6F, 0x006C6F),  # U+006C6F (CJK Unified Ideographs)
+    (0x006C86, 0x006C86),  # U+006C86 (CJK Unified Ideographs)
+    (0x006CDA, 0x006CDA),  # U+006CDA (CJK Unified Ideographs)
+    (0x006D04, 0x006D04),  # U+006D04 (CJK Unified Ideographs)
+    (0x006D6F, 0x006D6F),  # U+006D6F (CJK Unified Ideographs)
+    (0x006D87, 0x006D87),  # U+006D87 (CJK Unified Ideographs)
+    (0x007195, 0x007195),  # U+007195 (CJK Unified Ideographs)
+    (0x007F52, 0x007F52),  # U+007F52 (CJK Unified Ideographs)
+    (0x008A51, 0x008A51),  # U+008A51 (CJK Unified Ideographs)
+    (0x009357, 0x009357),  # U+009357 (CJK Unified Ideographs)
+    (0x0093A4, 0x0093A4),  # U+0093A4 (CJK Unified Ideographs)
+    (0x0093C6, 0x0093C6),  # U+0093C6 (CJK Unified Ideographs)
+    (0x0093DE, 0x0093DE),  # U+0093DE (CJK Unified Ideographs)
+    (0x0093F8, 0x0093F8),  # U+0093F8 (CJK Unified Ideographs)
+    (0x009431, 0x009431),  # U+009431 (CJK Unified Ideographs)
+    (0x009445, 0x009445),  # U+009445 (CJK Unified Ideographs)
+    (0x009448, 0x009448),  # U+009448 (CJK Unified Ideographs)
+    (0x00969D, 0x00969D),  # U+00969D (CJK Unified Ideographs)
+    (0x0096AF, 0x0096AF),  # U+0096AF (CJK Unified Ideographs)
+    (0x009733, 0x009733),  # U+009733 (CJK Unified Ideographs)
+    (0x00973B, 0x00973B),  # U+00973B (CJK Unified Ideographs)
+    (0x009743, 0x009743),  # U+009743 (CJK Unified Ideographs)
+    (0x00974D, 0x00974D),  # U+00974D (CJK Unified Ideographs)
+    (0x00974F, 0x00974F),  # U+00974F (CJK Unified Ideographs)
+    (0x009755, 0x009755),  # U+009755 (CJK Unified Ideographs)
+    (0x009857, 0x009857),  # U+009857 (CJK Unified Ideographs)
+    (0x009865, 0x009865),  # U+009865 (CJK Unified Ideographs)
+    (0x009927, 0x009927),  # U+009927 (CJK Unified Ideographs)
+    (0x00999E, 0x00999E),  # U+00999E (CJK Unified Ideographs)
+    (0x00F929, 0x00F929),  # U+00F929 (CJK Compatibility Ideographs)
+    (0x00F9DC, 0x00F9DC),  # U+00F9DC (CJK Compatibility Ideographs)
+    (0x00FA13, 0x00FA14),  # U+00FA13 - U+00FA14 (CJK Compatibility Ideographs)
+    (0x00FA29, 0x00FA2C),  # U+00FA29 - U+00FA2C (CJK Compatibility Ideographs)
+]
+
+
+================================================================================
+블록별 통계
+================================================================================
+
+Latin-1 Supplement: 78개
+CJK Unified Ideographs: 49개
+Enclosed Alphanumerics: 28개
+CJK Compatibility Ideographs: 8개
+Enclosed CJK Letters and Months: 7개
+Mathematical Operators: 4개
+Cyrillic: 3개
+Hiragana: 2개
+Basic Latin: 1개
+IPA Extensions: 1개
+Combining Diacritical Marks: 1개
+Letterlike Symbols: 1개
+Block Elements: 1개
+Geometric Shapes: 1개
+CJK Symbols and Punctuation: 1개

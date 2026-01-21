@@ -389,20 +389,84 @@ fn test_get_property() {
 }
 
 // ============================================
-// Special Characters Test
+// Emoji Test
 // ============================================
 
 #[test]
 #[ignore]
 #[serial]
-fn test_special_chars_set() {
+fn test_emoji_translation() {
     with_engine(|engine| {
-        // Check that special_chars set is populated
-        assert!(!engine.special_chars.is_empty());
+        // 이모지가 포함된 일본어 텍스트
+        let test_cases = [
+            ("こんにちは😀", "단일 이모지"),
+            ("ありがとう👨‍👩‍👧ございます", "ZWJ 시퀀스"),
+            ("今日🇰🇷天気", "국기 이모지"),
+            ("おはよう👋🏻", "피부색 이모지"),
+            ("テスト😀😀😀テスト", "다중 이모지"),
+        ];
 
-        // Check some known special characters
-        assert!(engine.special_chars.contains(&'♥'));
-        assert!(engine.special_chars.contains(&'♠'));
-        assert!(engine.special_chars.contains(&'①'));
+        for (input, desc) in test_cases {
+            println!("\n=== {} ===", desc);
+            println!("입력: {}", input);
+
+            // 이모지 코드포인트 확인
+            print!("코드포인트: ");
+            for c in input.chars() {
+                if c as u32 >= 0x1F000 || c == '\u{200D}' {
+                    print!("U+{:X} ", c as u32);
+                }
+            }
+            println!();
+
+            let result = engine.translate_mmntw(input);
+            match result {
+                Ok(translated) => {
+                    println!("번역 결과: {}", translated);
+
+                    // 이모지가 보존되었는지 확인
+                    let input_emojis: Vec<char> = input.chars()
+                        .filter(|c| *c as u32 >= 0x1F000 || *c == '\u{200D}')
+                        .collect();
+                    let output_emojis: Vec<char> = translated.chars()
+                        .filter(|c| *c as u32 >= 0x1F000 || *c == '\u{200D}')
+                        .collect();
+
+                    println!("입력 이모지: {:?}", input_emojis);
+                    println!("출력 이모지: {:?}", output_emojis);
+
+                    if input_emojis == output_emojis {
+                        println!("✓ 이모지 보존됨");
+                    } else {
+                        println!("✗ 이모지 변경/손실됨!");
+                    }
+                }
+                Err(e) => {
+                    println!("번역 실패: {:?}", e);
+                }
+            }
+        }
+    });
+}
+
+#[test]
+#[ignore]
+#[serial]
+fn test_emoji_only() {
+    with_engine(|engine| {
+        // 이모지만 있는 경우
+        let input = "😀";
+        println!("입력: {}", input);
+
+        let result = engine.translate_mmntw(input);
+        match result {
+            Ok(translated) => {
+                println!("번역 결과: '{}'", translated);
+                println!("번역 결과 바이트: {:?}", translated.as_bytes());
+            }
+            Err(e) => {
+                println!("번역 실패: {:?}", e);
+            }
+        }
     });
 }

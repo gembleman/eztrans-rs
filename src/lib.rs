@@ -1,10 +1,10 @@
 #![allow(non_camel_case_types)]
+pub mod char_ranges;
 mod error;
 pub mod ipc_protocol;
 pub mod server;
 pub use error::{EzTransError, TransErr};
 
-use std::collections::HashSet;
 use std::ffi::{CStr, CString, c_char, c_int, c_void};
 use std::fmt::Write;
 use std::path::Path;
@@ -40,8 +40,6 @@ pub type J2K_TranslateMMNTW = unsafe extern "system" fn(c_int, *const u16) -> *m
 /// EzTrans 엔진을 관리하는 구조체
 pub struct EzTransEngine {
     pub module: HMODULE,
-    /// 이지트랜스 엔진이 처리할 수 없는 문자가 문자열에 들어있는지 확인하는 역할.
-    pub special_chars: HashSet<char>,
 
     // 함수 포인터들
     pub free_mem: Option<J2K_FreeMem>,
@@ -90,37 +88,9 @@ impl EzTransEngine {
                 .map_err(|e: WindowsError| EzTransError::DllLoadError(e.to_string()))?
         };
 
-        let special_chars: HashSet<char> = [
-            '↔', '◁', '◀', '▷', '▶', '♤', '♠', '♡', '♥', '♧', '♣', '⊙', '◈', '▣', '◐', '◑', '▒',
-            '▤', '▥', '▨', '▧', '▦', '▩', '♨', '☏', '☎', '☜', '☞', '↕', '↗', '↙', '↖', '↘', '♩',
-            '♬', '㉿', '㈜', '㏇', '™', '㏂', '㏘', '＂', '＇', '∼', 'ˇ', '˘', '˝', '¡', '˚', '˙',
-            '˛', '¿', 'ː', '∏', '￦', '℉', '€', '㎕', '㎖', '㎗', 'ℓ', '㎘', '㎣', '㎤', '㎥',
-            '㎦', '㎙', '㎚', '㎛', '㎟', '㎠', '㎢', '㏊', '㎍', '㏏', '㎈', '㎉', '㏈', '㎧',
-            '㎨', '㎰', '㎱', '㎲', '㎳', '㎴', '㎵', '㎶', '㎷', '㎸', '㎀', '㎁', '㎂', '㎃',
-            '㎄', '㎺', '㎻', '㎼', '㎽', '㎾', '㎿', '㎐', '㎑', '㎒', '㎓', '㎔', 'Ω', '㏀',
-            '㏁', '㎊', '㎋', '㎌', '㏖', '㏅', '㎭', '㎮', '㎯', '㏛', '㎩', '㎪', '㎫', '㎬',
-            '㏝', '㏐', '㏓', '㏃', '㏉', '㏜', '㏆', '┒', '┑', '┚', '┙', '┖', '┕', '┎', '┍', '┞',
-            '┟', '┡', '┢', '┦', '┧', '┪', '┭', '┮', '┵', '┶', '┹', '┺', '┽', '┾', '╀', '╁', '╃',
-            '╄', '╅', '╆', '╇', '╈', '╉', '╊', '┱', '┲', 'ⅰ', 'ⅱ', 'ⅲ', 'ⅳ', 'ⅴ', 'ⅵ', 'ⅶ', 'ⅷ',
-            'ⅸ', 'ⅹ', '½', '⅓', '⅔', '¼', '¾', '⅛', '⅜', '⅝', '⅞', 'ⁿ', '₁', '₂', '₃', '₄', 'Ŋ',
-            'đ', 'Ħ', 'Ĳ', 'Ŀ', 'Ł', 'Œ', 'Ŧ', 'ħ', 'ı', 'ĳ', 'ĸ', 'ŀ', 'ł', 'œ', 'ŧ', 'ŋ', 'ŉ',
-            '㉠', '㉡', '㉢', '㉣', '㉤', '㉥', '㉦', '㉧', '㉨', '㉩', '㉪', '㉫', '㉬', '㉭',
-            '㉮', '㉯', '㉰', '㉱', '㉲', '㉳', '㉴', '㉵', '㉶', '㉷', '㉸', '㉹', '㉺', '㉻',
-            '㈀', '㈁', '㈂', '㈃', '㈄', '㈅', '㈆', '㈇', '㈈', '㈉', '㈊', '㈋', '㈌', '㈍',
-            '㈎', '㈏', '㈐', '㈑', '㈒', '㈓', '㈔', '㈕', '㈖', '㈗', '㈘', '㈙', '㈚', '㈛',
-            'ⓐ', 'ⓑ', 'ⓒ', 'ⓓ', 'ⓔ', 'ⓕ', 'ⓖ', 'ⓗ', 'ⓘ', 'ⓙ', 'ⓚ', 'ⓛ', 'ⓜ', 'ⓝ', 'ⓞ', 'ⓟ', 'ⓠ',
-            'ⓡ', 'ⓢ', 'ⓣ', 'ⓤ', 'ⓥ', 'ⓦ', 'ⓧ', 'ⓨ', 'ⓩ', '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧',
-            '⑨', '⑩', '⑪', '⑫', '⑬', '⑭', '⑮', '⒜', '⒝', '⒞', '⒟', '⒠', '⒡', '⒢', '⒣', '⒤', '⒥',
-            '⒦', '⒧', '⒨', '⒩', '⒪', '⒫', '⒬', '⒭', '⒮', '⒯', '⒰', '⒱', '⒲', '⒳', '⒴', '⒵', '⑴',
-            '⑵', '⑶', '⑷', '⑸', '⑹', '⑺', '⑻', '⑼', '⑽', '⑾', '⑿', '⒀', '⒁', '⒂',
-        ]
-        .into_iter()
-        .collect();
-
         // 엔진 인스턴스 생성
         let mut engine = Self {
             module,
-            special_chars,
             free_mem: None,
             get_prior_dict: None,
             get_property: None,
@@ -456,17 +426,25 @@ impl EzTransEngine {
         Ok(result)
     }
 
+    /// Check if a character needs encoding
+    /// Uses range-based checking for comprehensive coverage
+    #[inline]
+    pub fn needs_encoding(&self, c: char) -> bool {
+        // Check if it's a Hangul character
+        if self.is_hangul_range(c as u32) {
+            return true;
+        }
+
+        // Use range-based checking for known problematic unicode blocks
+        !char_ranges::is_safe_chars(c)
+    }
+
     pub fn default_translate(&self, input: &str) -> Result<String, EzTransError> {
         // 인코딩이 필요한지 빠르게 확인 (한글/특수문자 있는지)
-        let needs_encoding = input.chars().any(|c| {
-            c == '@'
-                || c == '\0'
-                || self.is_hangul_range(c as u32)
-                || self.special_chars.contains(&c)
-        });
+        let needs_encoding_check = input.chars().any(|c| self.needs_encoding(c));
 
         // 필요한 경우만 인코딩 수행
-        let encoded = if needs_encoding {
+        let encoded = if needs_encoding_check {
             self.hangul_encode(input)
         } else {
             input.to_string()
@@ -480,7 +458,7 @@ impl EzTransEngine {
         };
 
         // 필요한 경우만 디코딩
-        let result = if needs_encoding {
+        let result = if needs_encoding_check {
             self.hangul_decode(&translated)
         } else {
             translated
@@ -489,15 +467,15 @@ impl EzTransEngine {
         Ok(result)
     }
 
-    /// 한글 및 특수 문자를 16진수 유니코드로 인코딩
+    /// 한글 및 특수 문자를 16진수 유니코드로 인코딩 (6자리 고정)
     pub fn hangul_encode(&self, input: &str) -> String {
         let mut output = String::with_capacity(input.len() * 2);
 
         for c in input.chars() {
-            if c == '@' || c == '\0' || self.is_hangul_range(c as u32) {
-                write!(&mut output, "+x{:04X}", c as u32).unwrap();
-            } else if self.special_chars.contains(&c) {
-                write!(&mut output, "+X{:04X}", c as u32).unwrap();
+            if self.is_hangul_range(c as u32) {
+                write!(&mut output, "+x{:06X}", c as u32).unwrap();
+            } else if !char_ranges::is_safe_chars(c) {
+                write!(&mut output, "+X{:06X}", c as u32).unwrap();
             } else {
                 output.push(c);
             }
@@ -516,7 +494,7 @@ impl EzTransEngine {
     (code >= 0xD7B0 && code <= 0xD7FF) // Hangul Jamo Extended-B
     }
 
-    /// 16진수 유니코드로 인코딩된 문자열 디코딩
+    /// 16진수 유니코드로 인코딩된 문자열 디코딩 (6자리 고정)
     pub fn hangul_decode(&self, input: &str) -> String {
         let mut output = String::with_capacity(input.len());
         let mut chars = input.chars().peekable();
@@ -527,11 +505,11 @@ impl EzTransEngine {
                     if next == 'x' || next == 'X' {
                         chars.next(); // 'x'/'X' 소비
 
-                        // 4자리 16진수 추출
-                        let hex: String = chars.by_ref().take(4).collect();
+                        // 6자리 16진수 추출
+                        let hex: String = chars.by_ref().take(6).collect();
 
-                        // 유효한 16진수면 디코딩
-                        if hex.len() == 4 && hex.chars().all(|c| c.is_ascii_hexdigit()) {
+                        // 유효한 6자리 16진수면 디코딩
+                        if hex.len() == 6 && hex.chars().all(|c| c.is_ascii_hexdigit()) {
                             if let Ok(code) = u32::from_str_radix(&hex, 16) {
                                 if let Some(decoded_char) = char::from_u32(code) {
                                     output.push(decoded_char);
@@ -542,9 +520,7 @@ impl EzTransEngine {
 
                         // 디코딩 실패 시 원본 문자열 유지
                         output.push('+');
-                        if next == 'x' || next == 'X' {
-                            output.push(next);
-                        }
+                        output.push(next);
                         output.push_str(&hex);
                         continue;
                     }

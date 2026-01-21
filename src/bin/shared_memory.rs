@@ -1,6 +1,6 @@
 // Shared Memory 서버 진입점
-use std::{env, error::Error, u32};
 use eztrans_rs::EzTransEngine;
+use std::{env, error::Error, u32};
 use windows_shared_memory::{Client, ReceiveMessage};
 
 pub fn main() -> Result<(), Box<dyn Error>> {

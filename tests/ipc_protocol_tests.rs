@@ -1,7 +1,7 @@
 // IPC Protocol Tests
 
-use std::mem::size_of;
 use eztrans_rs::ipc_protocol::*;
+use std::mem::size_of;
 
 #[test]
 fn test_message_header_size() {
