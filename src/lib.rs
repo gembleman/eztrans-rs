@@ -46,7 +46,7 @@ pub struct EzTransEngine {
     pub get_prior_dict: Option<J2K_GetPriorDict>,
     pub get_property: Option<J2K_GetProperty>,
     pub initialize: Option<J2K_Initialize>,
-    /// 확장 초기화 함수, 이게 안 된다면, enhd가 적용되지 않은 eztrans dll이라는 얘기.
+    /// 확장 초기화 함수, 이게 안 된다면, EHND가 적용되지 않은 eztrans dll이라는 얘기.
     /// 따라서, translate_mmntw를 쓸 수 없다.
     pub initialize_ex: Option<J2K_InitializeEx>,
     pub reload_user_dict: Option<J2K_ReloadUserDict>,

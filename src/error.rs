@@ -1,4 +1,4 @@
-﻿use std::{ffi::NulError, fmt};
+﻿use std::ffi::NulError;
 
 use thiserror::Error;
 
@@ -14,7 +14,7 @@ pub enum EzTransError {
     InvalidPath,
     #[error("Failed to load dll: {0}")]
     DllLoadError(String),
-    #[error("Failed to load funtion: {0}")]
+    #[error("Failed to load function: {0}")]
     FunctionLoadError(String),
     #[error("Failed to call function: {0}")]
     FunctionCallFailed(String),
@@ -32,16 +32,8 @@ pub enum EzTransError {
 
 #[derive(Error, Debug, Clone)]
 pub enum TransErr {
-    ///TRANSLATE_MMNTW or MMNT returned a null pointer
+    #[error("TRANSLATE func returned a null pointer")]
     NullPointer,
-    ///EUC-KR decoding failed
+    #[error("EUC-KR decoding failed")]
     EucKrDecodeFailed,
-}
-impl fmt::Display for TransErr {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            TransErr::NullPointer => write!(f, "TRANSLATE func returned a null pointer"),
-            TransErr::EucKrDecodeFailed => write!(f, "EUC-KR decoding failed"),
-        }
-    }
 }
