@@ -7,6 +7,7 @@ license = "MIT"
 description = "FFI bindings and IPC server for ChangShinSoft's Eztrans software"
 repository = "https://github.com/gembleman/eztrans-rs.git"
 keywords = ["windows", "translation", "eztrans"]
+exclude = ["eztrans_dll/", "scripts/"]
 
 [dependencies]
 thiserror = "2.0"
