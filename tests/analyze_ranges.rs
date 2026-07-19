@@ -130,7 +130,10 @@ fn analyze_problematic_ranges() {
             all_problematic.extend(block_problematic);
         }
 
-        println!("\n=== Total Problematic Characters: {} ===\n", all_problematic.len());
+        println!(
+            "\n=== Total Problematic Characters: {} ===\n",
+            all_problematic.len()
+        );
 
         // Find continuous ranges
         let ranges = find_continuous_ranges(&all_problematic);
@@ -153,8 +156,10 @@ fn analyze_problematic_ranges() {
                 }
                 println!(")");
             } else {
-                println!("  Range:  U+{:04X}-U+{:04X} ('{}' to '{}', {} chars)",
-                    start, end, start_char, end_char, count);
+                println!(
+                    "  Range:  U+{:04X}-U+{:04X} ('{}' to '{}', {} chars)",
+                    start, end, start_char, end_char, count
+                );
             }
         }
 
@@ -183,13 +188,23 @@ fn analyze_problematic_ranges() {
         let range_size = ranges.len() * std::mem::size_of::<(u32, u32)>();
 
         println!("\n=== Size Comparison ===");
-        println!("HashSet approach: {} bytes ({} chars × {} bytes)",
-            hashset_size, all_problematic.len(), std::mem::size_of::<char>());
-        println!("Range approach:   {} bytes ({} ranges × {} bytes)",
-            range_size, ranges.len(), std::mem::size_of::<(u32, u32)>());
-        println!("Savings: {} bytes ({:.1}%)",
+        println!(
+            "HashSet approach: {} bytes ({} chars × {} bytes)",
+            hashset_size,
+            all_problematic.len(),
+            std::mem::size_of::<char>()
+        );
+        println!(
+            "Range approach:   {} bytes ({} ranges × {} bytes)",
+            range_size,
+            ranges.len(),
+            std::mem::size_of::<(u32, u32)>()
+        );
+        println!(
+            "Savings: {} bytes ({:.1}%)",
             hashset_size.saturating_sub(range_size),
-            (1.0 - range_size as f64 / hashset_size as f64) * 100.0);
+            (1.0 - range_size as f64 / hashset_size as f64) * 100.0
+        );
     });
 }
 
@@ -208,7 +223,7 @@ fn test_practical_vs_comprehensive() {
             "温度は30℃です。",
             "割合は½です。",
             "記号→矢印←です。",
-            "\x00制御文字テスト\x01",  // Control characters
+            "\x00制御文字テスト\x01", // Control characters
             "数学記号∑∏∫",
             "OCR記号⑇⑈⑉",
         ];

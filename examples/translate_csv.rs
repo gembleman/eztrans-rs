@@ -86,8 +86,10 @@ fn main() -> Result<(), Box<dyn Error>> {
             if accept.trim().eq_ignore_ascii_case("TRUE") {
                 skipped += 1;
                 if total % 50 == 0 {
-                    println!("진행 중... {}/{} 처리됨 (번역: {}, 건너뜀: {})",
-                        total, total, translated, skipped);
+                    println!(
+                        "진행 중... {}/{} 처리됨 (번역: {}, 건너뜀: {})",
+                        total, total, translated, skipped
+                    );
                 }
                 continue;
             }
@@ -97,8 +99,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         if record.character.is_empty() {
             skipped += 1;
             if total % 50 == 0 {
-                println!("진행 중... {}/{} 처리됨 (번역: {}, 건너뜀: {})",
-                    total, total, translated, skipped);
+                println!(
+                    "진행 중... {}/{} 처리됨 (번역: {}, 건너뜀: {})",
+                    total, total, translated, skipped
+                );
             }
             continue;
         }
@@ -128,8 +132,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
                 // 진행 상황 출력
                 if total % 50 == 0 {
-                    println!("진행 중... {}/{} 처리됨 (번역: {}, 건너뜀: {}, 일치: {})",
-                        total, total, translated, skipped, matches);
+                    println!(
+                        "진행 중... {}/{} 처리됨 (번역: {}, 건너뜀: {}, 일치: {})",
+                        total, total, translated, skipped, matches
+                    );
                 }
             }
             Err(e) => {
@@ -143,7 +149,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("총 레코드: {}", total);
     println!("번역 성공: {}", translated);
     println!("건너뜀: {}", skipped);
-    println!("일치: {} ({:.1}%)", matches, (matches as f64 / translated as f64) * 100.0);
+    println!(
+        "일치: {} ({:.1}%)",
+        matches,
+        (matches as f64 / translated as f64) * 100.0
+    );
 
     // 결과를 CSV로 저장
     println!("\n결과 저장 중: {}", output_csv.display());

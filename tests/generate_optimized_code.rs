@@ -84,7 +84,10 @@ fn generate_optimized_special_chars_code() {
             }
         }
 
-        println!("Characters that need encoding: {}", needs_encoding_chars.len());
+        println!(
+            "Characters that need encoding: {}",
+            needs_encoding_chars.len()
+        );
         println!("Characters that are safe: {}", safe_chars.len());
 
         // Check is_safe_chars accuracy
@@ -169,7 +172,8 @@ fn analyze_character_categories() {
             if let Some(c) = char::from_u32(code) {
                 if is_safe_chars(c) {
                     let category = categorize(code);
-                    blocks.entry(category.to_string())
+                    blocks
+                        .entry(category.to_string())
                         .or_insert_with(Vec::new)
                         .push(c);
                 }

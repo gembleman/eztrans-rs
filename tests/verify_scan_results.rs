@@ -93,7 +93,10 @@ fn verify_problematic_chars_sample() {
     };
 
     let problematic_chars = parse_scan_results(&content);
-    println!("Parsed {} problematic characters from results file", problematic_chars.len());
+    println!(
+        "Parsed {} problematic characters from results file",
+        problematic_chars.len()
+    );
 
     // Sample some characters to verify
     let sample_chars: Vec<u32> = vec![
@@ -107,7 +110,6 @@ fn verify_problematic_chars_sample() {
         0x3130, // ㄰ (Hangul Compatibility Jamo)
         0xAC00, // 가 (Hangul syllable - check if problematic)
         0xFF02, // ＂
-
         // Characters NOT in results (should work fine)
         0x0041, // A (Latin A)
         0x0042, // B
@@ -137,8 +139,10 @@ fn verify_problematic_chars_sample() {
                     "MISMATCH"
                 };
 
-                println!("U+{:04X} '{}': expected={}, actual={} [{}]",
-                    code, c, expected_needs_encoding, actual_needs_encoding, status);
+                println!(
+                    "U+{:04X} '{}': expected={}, actual={} [{}]",
+                    code, c, expected_needs_encoding, actual_needs_encoding, status
+                );
             }
         }
 
@@ -149,7 +153,10 @@ fn verify_problematic_chars_sample() {
         if !errors.is_empty() {
             println!("\nMismatches found:");
             for (code, c, expected, actual) in &errors {
-                println!("  U+{:04X} '{}': file says {}, but test shows {}", code, c, expected, actual);
+                println!(
+                    "  U+{:04X} '{}': file says {}, but test shows {}",
+                    code, c, expected, actual
+                );
             }
         }
     });
@@ -173,7 +180,10 @@ fn verify_all_problematic_chars() {
     };
 
     let problematic_chars = parse_scan_results(&content);
-    println!("Verifying {} problematic characters...", problematic_chars.len());
+    println!(
+        "Verifying {} problematic characters...",
+        problematic_chars.len()
+    );
 
     with_engine(|engine| {
         let mut correct = 0;
@@ -196,8 +206,12 @@ fn verify_all_problematic_chars() {
                 }
 
                 if total_tested % 500 == 0 {
-                    print!("\rProgress: {} / {} (false positives: {})   ",
-                        total_tested, problematic_chars.len(), false_positive);
+                    print!(
+                        "\rProgress: {} / {} (false positives: {})   ",
+                        total_tested,
+                        problematic_chars.len(),
+                        false_positive
+                    );
                     use std::io::Write;
                     std::io::stdout().flush().ok();
                 }
@@ -207,8 +221,14 @@ fn verify_all_problematic_chars() {
         println!("\n\n--- Verification Results ---");
         println!("Total tested: {}", total_tested);
         println!("Confirmed problematic: {}", correct);
-        println!("False positives (file says problematic but test OK): {}", false_positive);
-        println!("Accuracy: {:.2}%", (correct as f64 / total_tested as f64) * 100.0);
+        println!(
+            "False positives (file says problematic but test OK): {}",
+            false_positive
+        );
+        println!(
+            "Accuracy: {:.2}%",
+            (correct as f64 / total_tested as f64) * 100.0
+        );
 
         if !false_positive_list.is_empty() {
             println!("\nSample false positives (first 50):");
@@ -279,8 +299,14 @@ fn verify_non_problematic_sample() {
         println!("--- Non-Problematic Verification Results ---");
         println!("Total tested: {}", total_tested);
         println!("Confirmed OK: {}", correct);
-        println!("False negatives (file says OK but actually problematic): {}", false_negative);
-        println!("Accuracy: {:.2}%", (correct as f64 / total_tested as f64) * 100.0);
+        println!(
+            "False negatives (file says OK but actually problematic): {}",
+            false_negative
+        );
+        println!(
+            "Accuracy: {:.2}%",
+            (correct as f64 / total_tested as f64) * 100.0
+        );
 
         if !false_negative_list.is_empty() {
             println!("\nFalse negatives found:");
@@ -339,7 +365,11 @@ fn verify_scan_statistics() {
             println!("\n✓ Character count matches!");
         } else {
             println!("\n✗ Character count mismatch!");
-            println!("  Expected: {}, Actual: {}", expected, problematic_chars.len());
+            println!(
+                "  Expected: {}, Actual: {}",
+                expected,
+                problematic_chars.len()
+            );
         }
     }
 

@@ -743,11 +743,15 @@ fn scan_multiprocess_v3(num_processes_opt: Option<usize>) {
                         original_escaped,
                         translated_escaped,
                         prob_char.issue_type
-                    ).ok();
+                    )
+                    .ok();
                 }
 
                 println!("\nProblematic characters saved to: {}", csv_path);
-                println!("Total problematic characters: {}", all_problematic_chars.len());
+                println!(
+                    "Total problematic characters: {}",
+                    all_problematic_chars.len()
+                );
             }
             Err(e) => {
                 eprintln!("\nFailed to create CSV file: {}", e);

@@ -108,7 +108,11 @@ mod tests {
             for c in s.chars() {
                 let code = c as u32;
                 // 이모지 범위 또는 특수 문자
-                if code >= 0x1F000 || c == '\u{200D}' || (code >= 0x1F1E0 && code <= 0x1F1FF) || code >= 0x10000 {
+                if code >= 0x1F000
+                    || c == '\u{200D}'
+                    || (code >= 0x1F1E0 && code <= 0x1F1FF)
+                    || code >= 0x10000
+                {
                     write!(&mut output, "+X{:06X}", code).unwrap();
                 } else if code >= 0xAC00 && code <= 0xD7A3 {
                     // 한글
@@ -150,9 +154,9 @@ mod tests {
         let test_cases = [
             "😀",           // 단일 이모지
             "Hello 😀",     // 텍스트 + 이모지
-            "👨‍👩‍👧",         // ZWJ 시퀀스
-            "🇰🇷",          // 국기
-            "👋🏻",          // 피부색
+            "👨‍👩‍👧",           // ZWJ 시퀀스
+            "🇰🇷",           // 국기
+            "👋🏻",           // 피부색
             "テスト😀です", // 일본어 + 이모지
             "한글테스트",   // 한글
             "테스트123",    // 한글 + 숫자
@@ -162,7 +166,10 @@ mod tests {
         for original in test_cases {
             let encoded = encode(original);
             let decoded = decode(&encoded);
-            println!("원본: '{}' -> 인코딩: '{}' -> 디코딩: '{}'", original, encoded, decoded);
+            println!(
+                "원본: '{}' -> 인코딩: '{}' -> 디코딩: '{}'",
+                original, encoded, decoded
+            );
             assert_eq!(original, decoded, "라운드트립 실패: {}", original);
         }
     }

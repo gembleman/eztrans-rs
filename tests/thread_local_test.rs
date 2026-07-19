@@ -324,7 +324,7 @@ fn test_staggered_init() {
 
     let (dll_path, dat_path) = get_engine_paths();
 
-    let num_threads = 2;  // Reduced for testing
+    let num_threads = 2; // Reduced for testing
     let iterations_per_thread = 10;
 
     let success_count = Arc::new(AtomicUsize::new(0));
@@ -564,7 +564,11 @@ fn test_two_engines_serialized() {
 
                 // Run translations with global lock
                 for i in 0..iterations_per_thread {
-                    let text = if i % 2 == 0 { "おはよう" } else { "こんにちは" };
+                    let text = if i % 2 == 0 {
+                        "おはよう"
+                    } else {
+                        "こんにちは"
+                    };
 
                     // Acquire global lock before translation
                     let _guard = translate_lock.lock().unwrap();
@@ -575,7 +579,10 @@ fn test_two_engines_serialized() {
                         }
                         Ok(translated) => {
                             errors.fetch_add(1, Ordering::SeqCst);
-                            println!("  Thread {} corrupted: '{}' -> '{}'", thread_id, text, translated);
+                            println!(
+                                "  Thread {} corrupted: '{}' -> '{}'",
+                                thread_id, text, translated
+                            );
                         }
                         Err(e) => {
                             errors.fetch_add(1, Ordering::SeqCst);
@@ -626,12 +633,16 @@ fn test_single_thread_two_engines() {
 
     println!("Creating engine 1...");
     let engine1 = EzTransEngine::new(&dll_path).expect("Failed to create engine 1");
-    engine1.initialize_ex("CSUSER123455", &dat_path).expect("Failed to init engine 1");
+    engine1
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to init engine 1");
     println!("  Engine 1 ready.");
 
     println!("Creating engine 2...");
     let engine2 = EzTransEngine::new(&dll_path).expect("Failed to create engine 2");
-    engine2.initialize_ex("CSUSER123455", &dat_path).expect("Failed to init engine 2");
+    engine2
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to init engine 2");
     println!("  Engine 2 ready.");
 
     println!("\nAlternating translations:");
@@ -646,7 +657,9 @@ fn test_single_thread_two_engines() {
         match engine1.translate_mmntw(text1) {
             Ok(result) if !result.is_empty() && result.contains("안녕") => {
                 engine1_success += 1;
-                if i < 3 { println!("  [{}] Engine1: '{}' -> '{}'", i, text1, result); }
+                if i < 3 {
+                    println!("  [{}] Engine1: '{}' -> '{}'", i, text1, result);
+                }
             }
             Ok(result) => {
                 engine1_fail += 1;
@@ -663,7 +676,9 @@ fn test_single_thread_two_engines() {
         match engine2.translate_mmntw(text2) {
             Ok(result) if !result.is_empty() && result.contains("안녕") => {
                 engine2_success += 1;
-                if i < 3 { println!("  [{}] Engine2: '{}' -> '{}'", i, text2, result); }
+                if i < 3 {
+                    println!("  [{}] Engine2: '{}' -> '{}'", i, text2, result);
+                }
             }
             Ok(result) => {
                 engine2_fail += 1;
@@ -677,8 +692,14 @@ fn test_single_thread_two_engines() {
     }
 
     println!("\nResults:");
-    println!("  Engine 1: {}/20 success, {} failed", engine1_success, engine1_fail);
-    println!("  Engine 2: {}/20 success, {} failed", engine2_success, engine2_fail);
+    println!(
+        "  Engine 1: {}/20 success, {} failed",
+        engine1_success, engine1_fail
+    );
+    println!(
+        "  Engine 2: {}/20 success, {} failed",
+        engine2_success, engine2_fail
+    );
 
     if engine1_fail == 0 && engine2_fail == 0 {
         println!("\n✓ Both engines work correctly when alternating!");
@@ -705,7 +726,9 @@ fn test_dll_handle_identity() {
     let (dll_path, dat_path) = get_engine_paths();
 
     let engine1 = EzTransEngine::new(&dll_path).expect("Failed to create engine 1");
-    engine1.initialize_ex("CSUSER123455", &dat_path).expect("Failed to init engine 1");
+    engine1
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to init engine 1");
 
     let engine2 = EzTransEngine::new(&dll_path).expect("Failed to create engine 2");
     // Don't initialize engine2 to see if the handle is the same
@@ -727,7 +750,10 @@ fn test_dll_handle_identity() {
     println!("\nTesting if engine2 works without explicit initialization...");
     match engine2.translate_mmntw("テスト") {
         Ok(result) => {
-            println!("  Engine2 (uninitialized) translated: 'テスト' -> '{}'", result);
+            println!(
+                "  Engine2 (uninitialized) translated: 'テスト' -> '{}'",
+                result
+            );
             if !result.is_empty() {
                 println!("  ⚠ Engine2 works because it shares DLL state with Engine1!");
             }
@@ -758,11 +784,16 @@ fn test_cross_thread_engine_use() {
     // Create and initialize in main thread
     println!("Main thread: Creating and initializing engine...");
     let engine = EzTransEngine::new(&dll_path).expect("Failed to create engine");
-    engine.initialize_ex("CSUSER123455", &dat_path).expect("Failed to init");
+    engine
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to init");
 
     // Test in main thread first
     let main_result = engine.translate_mmntw("メインスレッド").unwrap();
-    println!("  Main thread translation: 'メインスレッド' -> '{}'", main_result);
+    println!(
+        "  Main thread translation: 'メインスレッド' -> '{}'",
+        main_result
+    );
 
     let wrapper = Arc::new(UnsafeEngineWrapper(engine));
     let wrapper_clone = Arc::clone(&wrapper);
@@ -773,7 +804,10 @@ fn test_cross_thread_engine_use() {
         println!("  Spawned thread: Attempting translation...");
         match wrapper.0.translate_mmntw("サブスレッド") {
             Ok(result) => {
-                println!("  Spawned thread translation: 'サブスレッド' -> '{}'", result);
+                println!(
+                    "  Spawned thread translation: 'サブスレッド' -> '{}'",
+                    result
+                );
                 if result.contains("서브") || result.contains("스레드") || !result.is_empty() {
                     println!("  ✓ Cross-thread usage works!");
                     true
@@ -877,7 +911,10 @@ fn test_thread_local_heavy_load() {
     let successes = success_count.load(Ordering::SeqCst);
     let errors = error_count.load(Ordering::SeqCst);
 
-    println!("Heavy Load Results ({} threads, {} ops each):", num_threads, iterations_per_thread);
+    println!(
+        "Heavy Load Results ({} threads, {} ops each):",
+        num_threads, iterations_per_thread
+    );
     println!("  Total: {}", total);
     println!("  Success: {}", successes);
     println!("  Errors: {}", errors);

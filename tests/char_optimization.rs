@@ -114,7 +114,6 @@ fn test_sample_unicode_blocks() {
             ('A', "Basic Latin Letter"),
             ('@', "At Sign"),
             ('$', "Dollar Sign"),
-
             // Latin-1 Supplement
             ('©', "Copyright"),
             ('®', "Registered"),
@@ -122,45 +121,37 @@ fn test_sample_unicode_blocks() {
             ('±', "Plus-Minus"),
             ('×', "Multiplication"),
             ('÷', "Division"),
-
             // Number Forms
             ('½', "One Half"),
             ('¼', "One Quarter"),
             ('¾', "Three Quarters"),
-
             // Currency
             ('€', "Euro"),
             ('£', "Pound"),
             ('¥', "Yen"),
             ('₩', "Won"),
-
             // Arrows
             ('←', "Left Arrow"),
             ('→', "Right Arrow"),
             ('↑', "Up Arrow"),
             ('↓', "Down Arrow"),
             ('↔', "Left-Right Arrow"),
-
             // Enclosed Numbers
             ('①', "Circled 1"),
             ('②', "Circled 2"),
             ('⑩', "Circled 10"),
-
             // Enclosed Letters
             ('ⓐ', "Circled a"),
             ('Ⓐ', "Circled A"),
-
             // Box Drawing
             ('─', "Box Horizontal"),
             ('│', "Box Vertical"),
             ('┌', "Box Down-Right"),
             ('└', "Box Up-Right"),
-
             // Geometric Shapes
             ('■', "Black Square"),
             ('●', "Black Circle"),
             ('▲', "Black Triangle Up"),
-
             // Symbols
             ('☆', "White Star"),
             ('★', "Black Star"),
@@ -168,18 +159,15 @@ fn test_sample_unicode_blocks() {
             ('♥', "Heart"),
             ('♣', "Club"),
             ('♦', "Diamond"),
-
             // Hangul Jamo
             ('ㄱ', "Hangul Jamo G"),
             ('ㄴ', "Hangul Jamo N"),
             ('ㅏ', "Hangul Jamo A"),
-
             // CJK Compatibility
             ('㎕', "Micro-liter"),
             ('㎖', "Milli-liter"),
             ('㎞', "Kilo-meter"),
             ('㎡', "Square meter"),
-
             // Enclosed CJK
             ('㈀', "Parenthesized Hangul Kiyeok"),
             ('㉠', "Circled Hangul Kiyeok"),
@@ -240,7 +228,10 @@ fn test_find_missing_chars() {
         if needs_encoding_list.is_empty() {
             println!("\n✓ No characters marked safe but need encoding!");
         } else {
-            println!("\n⚠ Characters marked safe but need encoding: {}", needs_encoding_list.len());
+            println!(
+                "\n⚠ Characters marked safe but need encoding: {}",
+                needs_encoding_list.len()
+            );
             for (c, range) in &needs_encoding_list {
                 println!("  '{}' (U+{:04X}) from {}", c, *c as u32, range);
             }
@@ -281,7 +272,10 @@ fn test_optimize_special_chars() {
 
         let filtered_count = unsafe_and_needs_encoding.len();
         println!("  Unsafe chars needing encoding: {}", filtered_count);
-        println!("  Safe chars needing encoding: {}", safe_but_needs_encoding.len());
+        println!(
+            "  Safe chars needing encoding: {}",
+            safe_but_needs_encoding.len()
+        );
 
         // Step 2: Report findings
         println!("\nStep 2: Analysis results");
@@ -299,7 +293,9 @@ fn test_optimize_special_chars() {
         }
 
         println!("\nTotal characters tested: {}", tested);
-        println!("Accuracy: {:.2}%",
-            100.0 * (1.0 - (safe_but_needs_encoding.len() as f64 / tested as f64)))
+        println!(
+            "Accuracy: {:.2}%",
+            100.0 * (1.0 - (safe_but_needs_encoding.len() as f64 / tested as f64))
+        )
     });
 }

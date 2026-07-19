@@ -1,9 +1,9 @@
 // 멀티프로세싱 기본 테스트
 // cargo test --target i686-pc-windows-msvc --test multiprocess_test test_basic_multiprocess -- --nocapture
 
-use std::process::{Command, Stdio};
-use std::io::{BufRead, BufReader, Write};
 use std::env;
+use std::io::{BufRead, BufReader, Write};
+use std::process::{Command, Stdio};
 use std::time::Instant;
 
 // ============================================================================
@@ -61,7 +61,11 @@ fn test_cmd_multiprocess() {
     println!("Completed in {:?}", elapsed);
     println!("Results collected: {}/{}", results.len(), num_workers);
 
-    assert_eq!(results.len(), num_workers, "Not all workers returned results");
+    assert_eq!(
+        results.len(),
+        num_workers,
+        "Not all workers returned results"
+    );
     println!("\nTest PASSED!");
 }
 
@@ -131,7 +135,11 @@ fn test_powershell_multiprocess() {
     println!("Completed in {:?}", elapsed);
     println!("Results collected: {}/{}", results.len(), num_workers);
 
-    assert_eq!(results.len(), num_workers, "Not all workers returned results");
+    assert_eq!(
+        results.len(),
+        num_workers,
+        "Not all workers returned results"
+    );
     println!("\nTest PASSED!");
 }
 
@@ -151,7 +159,10 @@ fn run_worker_task(params: &str) {
     }
 
     // JSON 형식으로 출력
-    println!("{{\"type\":\"result\",\"worker\":{},\"sum\":{}}}", worker_id, sum);
+    println!(
+        "{{\"type\":\"result\",\"worker\":{},\"sum\":{}}}",
+        worker_id, sum
+    );
     std::io::stdout().flush().ok();
 }
 
@@ -184,7 +195,7 @@ fn test_self_multiprocess() {
     for i in 0..num_workers {
         let mut cmd = Command::new(&current_exe);
         cmd.env("WORKER_TASK_PARAMS", format!("{}|100000", i))
-            .arg("worker_task_runner")  // 특정 테스트만 실행
+            .arg("worker_task_runner") // 특정 테스트만 실행
             .arg("--exact")
             .arg("--nocapture")
             .stdout(Stdio::piped())
@@ -231,7 +242,11 @@ fn test_self_multiprocess() {
         println!("  Worker {}: {}", id, result);
     }
 
-    assert_eq!(results.len(), num_workers, "Not all workers returned results");
+    assert_eq!(
+        results.len(),
+        num_workers,
+        "Not all workers returned results"
+    );
     println!("\nTest PASSED!");
 }
 
@@ -337,6 +352,11 @@ fn test_streaming_multiprocess() {
     println!("Total messages: {}", all_messages.len());
 
     // 각 워커당 6개 메시지 (5 progress + 1 complete)
-    assert_eq!(all_messages.len(), num_workers * 6, "Expected {} messages", num_workers * 6);
+    assert_eq!(
+        all_messages.len(),
+        num_workers * 6,
+        "Expected {} messages",
+        num_workers * 6
+    );
     println!("\nTest PASSED!");
 }

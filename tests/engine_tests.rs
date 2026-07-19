@@ -425,10 +425,12 @@ fn test_emoji_translation() {
                     println!("번역 결과: {}", translated);
 
                     // 이모지가 보존되었는지 확인
-                    let input_emojis: Vec<char> = input.chars()
+                    let input_emojis: Vec<char> = input
+                        .chars()
                         .filter(|c| *c as u32 >= 0x1F000 || *c == '\u{200D}')
                         .collect();
-                    let output_emojis: Vec<char> = translated.chars()
+                    let output_emojis: Vec<char> = translated
+                        .chars()
                         .filter(|c| *c as u32 >= 0x1F000 || *c == '\u{200D}')
                         .collect();
 

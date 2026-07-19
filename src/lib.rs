@@ -9,8 +9,9 @@ use std::ffi::{CStr, CString, c_char, c_int, c_void};
 use std::fmt::Write;
 use std::path::Path;
 use windows::Win32::Foundation::{FreeLibrary, HMODULE};
-use windows::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryA};
-use windows::core::{Error as WindowsError, PCSTR};
+use windows::Win32::Globalization::{CP_ACP, WC_COMPOSITECHECK, WideCharToMultiByte};
+use windows::Win32::System::LibraryLoader::{GetProcAddress, LoadLibraryW};
+use windows::core::{Error as WindowsError, PCSTR, PCWSTR};
 
 // Type definitions for all EzTrans engine functions
 pub type J2K_FreeMem = unsafe extern "system" fn(*mut c_void);
@@ -73,18 +74,18 @@ pub struct EzTransEngine {
 impl EzTransEngine {
     /// EzTrans 엔진을 초기화합니다.
     pub fn new<P: AsRef<Path>>(dll_path: P) -> Result<Self, EzTransError> {
-        // DLL 경로를 문자열로 변환
+        // DLL 경로를 UTF-16으로 변환 (한글 경로 지원)
         let path_str = dll_path
             .as_ref()
             .to_str()
             .ok_or(EzTransError::InvalidPath)?;
 
-        // CString으로 변환 (null 종료 문자열)
-        let c_path = CString::new(path_str)?;
+        // UTF-16으로 변환 (null 종료)
+        let wide_path: Vec<u16> = path_str.encode_utf16().chain(std::iter::once(0)).collect();
 
-        // DLL 로드
+        // DLL 로드 (LoadLibraryW로 유니코드 경로 지원)
         let module = unsafe {
-            LoadLibraryA(PCSTR(c_path.as_ptr() as *const u8))
+            LoadLibraryW(PCWSTR(wide_path.as_ptr()))
                 .map_err(|e: WindowsError| EzTransError::DllLoadError(e.to_string()))?
         };
 
@@ -296,10 +297,14 @@ impl EzTransEngine {
             EzTransError::FunctionLoadError("확장 초기화 함수가 로드되지 않았습니다.".to_string())
         })?;
 
+        // path1은 보통 ASCII 라이선스 키이므로 그대로 사용
         let c_path1 = CString::new(path1)?;
-        let c_path2 = CString::new(path2)?;
 
-        let result = unsafe { initialize_ex_fn(c_path1.as_ptr(), c_path2.as_ptr()) };
+        // path2(DAT 경로)는 시스템 ANSI 코드 페이지로 변환 (WideCharToMultiByte 사용)
+        let path2_ansi = Self::to_ansi_string(path2)?;
+
+        let result =
+            unsafe { initialize_ex_fn(c_path1.as_ptr(), path2_ansi.as_ptr() as *const c_char) };
         if result != 1 {
             return Err(EzTransError::FunctionCallFailed(format!(
                 "initialize_ex 함수가 실패했습니다. (코드: {})",
@@ -308,6 +313,38 @@ impl EzTransEngine {
         }
 
         Ok(())
+    }
+
+    /// UTF-8 문자열을 시스템 ANSI 코드 페이지로 변환
+    fn to_ansi_string(s: &str) -> Result<Vec<u8>, EzTransError> {
+        // UTF-16으로 변환
+        let wide: Vec<u16> = s.encode_utf16().chain(std::iter::once(0)).collect();
+
+        unsafe {
+            // 필요한 버퍼 크기 계산
+            let size = WideCharToMultiByte(CP_ACP, WC_COMPOSITECHECK, &wide, None, None, None);
+
+            if size == 0 {
+                return Err(EzTransError::InvalidPath);
+            }
+
+            // 버퍼 할당 및 변환
+            let mut buffer = vec![0u8; size as usize];
+            let result = WideCharToMultiByte(
+                CP_ACP,
+                WC_COMPOSITECHECK,
+                &wide,
+                Some(&mut buffer),
+                None,
+                None,
+            );
+
+            if result == 0 {
+                return Err(EzTransError::InvalidPath);
+            }
+
+            Ok(buffer)
+        }
     }
 
     /// EzTrans 엔진을 종료합니다.

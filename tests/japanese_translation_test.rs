@@ -299,11 +299,7 @@ fn format_duration(duration: Duration) -> String {
 }
 
 /// 실시간 진행률 표시
-fn print_progress_dashboard(
-    statuses: &[WorkerStatus],
-    total_codepoints: u32,
-    start_time: Instant,
-) {
+fn print_progress_dashboard(statuses: &[WorkerStatus], total_codepoints: u32, start_time: Instant) {
     let total_tested: u32 = statuses.iter().map(|s| s.tested).sum();
     let total_non_korean: u32 = statuses.iter().map(|s| s.non_korean_count).sum();
     let completed_count = statuses.iter().filter(|s| s.completed).count();
@@ -552,15 +548,24 @@ fn scan_japanese_multiprocess(num_processes_opt: Option<usize>) {
         format_duration(total_elapsed)
     );
     println!("Total Japanese characters tested: {}", total_tested);
-    println!("Non-Korean translations found: {}", all_non_korean_results.len());
+    println!(
+        "Non-Korean translations found: {}",
+        all_non_korean_results.len()
+    );
 
     // CSV 파일로 저장
     let csv_path = "japanese_non_korean_translations.csv";
     let mut wtr = csv::Writer::from_path(csv_path).expect("Failed to create CSV file");
 
     // CSV 헤더
-    wtr.write_record(&["Codepoint", "Character", "Translation", "Has Korean", "Error"])
-        .expect("Failed to write CSV header");
+    wtr.write_record(&[
+        "Codepoint",
+        "Character",
+        "Translation",
+        "Has Korean",
+        "Error",
+    ])
+    .expect("Failed to write CSV header");
 
     // CSV 데이터
     for result in &all_non_korean_results {
@@ -579,7 +584,10 @@ fn scan_japanese_multiprocess(num_processes_opt: Option<usize>) {
     println!("\nResults saved to: {}", csv_path);
 
     // 통계 출력
-    let error_count = all_non_korean_results.iter().filter(|r| !r.error.is_empty()).count();
+    let error_count = all_non_korean_results
+        .iter()
+        .filter(|r| !r.error.is_empty())
+        .count();
     let unchanged_count = all_non_korean_results
         .iter()
         .filter(|r| r.translation == r.character && r.error.is_empty())
@@ -588,5 +596,8 @@ fn scan_japanese_multiprocess(num_processes_opt: Option<usize>) {
     println!("\n=== STATISTICS ===");
     println!("Translation errors: {}", error_count);
     println!("Unchanged (not translated): {}", unchanged_count);
-    println!("Translated to non-Korean: {}", all_non_korean_results.len() - error_count - unchanged_count);
+    println!(
+        "Translated to non-Korean: {}",
+        all_non_korean_results.len() - error_count - unchanged_count
+    );
 }

@@ -4,7 +4,10 @@
 // Run with: cargo test --target i686-pc-windows-msvc --test thread_safety_test -- --ignored --nocapture
 
 use eztrans_rs::EzTransEngine;
-use std::sync::{Arc, Barrier, atomic::{AtomicUsize, Ordering}};
+use std::sync::{
+    Arc, Barrier,
+    atomic::{AtomicUsize, Ordering},
+};
 use std::thread;
 use std::time::{Duration, Instant};
 
@@ -43,14 +46,17 @@ fn is_corrupted(input: &str, output: &str) -> bool {
 
     // 3. Output contains garbage-looking patterns (random ASCII mixed with Korean)
     // Valid Korean output should mostly be Hangul, punctuation, or spaces
-    let korean_count = output.chars().filter(|c| {
-        let code = *c as u32;
-        // Hangul syllables or common punctuation
-        (code >= 0xAC00 && code <= 0xD7A3) ||  // Hangul
+    let korean_count = output
+        .chars()
+        .filter(|c| {
+            let code = *c as u32;
+            // Hangul syllables or common punctuation
+            (code >= 0xAC00 && code <= 0xD7A3) ||  // Hangul
         (code >= 0x3000 && code <= 0x303F) ||  // CJK punctuation
         c.is_ascii_punctuation() ||
         c.is_whitespace()
-    }).count();
+        })
+        .count();
 
     let total = output.chars().count();
     if total > 5 {
@@ -74,7 +80,9 @@ fn test_sequential_baseline() {
 
     let (dll_path, dat_path) = get_engine_paths();
     let engine = EzTransEngine::new(&dll_path).expect("Failed to load DLL");
-    engine.initialize_ex("CSUSER123455", &dat_path).expect("Failed to initialize");
+    engine
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to initialize");
 
     let test_texts = vec![
         "おはようございます。",
@@ -107,9 +115,15 @@ fn test_sequential_baseline() {
     println!("\nSequential Results:");
     println!("  Success: {}/{}", success_count, iterations);
     println!("  Time: {:?}", elapsed);
-    println!("  Rate: {:.1} translations/sec", iterations as f64 / elapsed.as_secs_f64());
+    println!(
+        "  Rate: {:.1} translations/sec",
+        iterations as f64 / elapsed.as_secs_f64()
+    );
 
-    assert_eq!(success_count, iterations, "Sequential baseline should have 100% success");
+    assert_eq!(
+        success_count, iterations,
+        "Sequential baseline should have 100% success"
+    );
 }
 
 // ============================================
@@ -123,7 +137,9 @@ fn test_multithread_shared_engine() {
 
     let (dll_path, dat_path) = get_engine_paths();
     let engine = EzTransEngine::new(&dll_path).expect("Failed to load DLL");
-    engine.initialize_ex("CSUSER123455", &dat_path).expect("Failed to initialize");
+    engine
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to initialize");
 
     let engine = Arc::new(UnsafeEngineWrapper(engine));
 
@@ -137,7 +153,7 @@ fn test_multithread_shared_engine() {
     let corrupted_count = Arc::new(AtomicUsize::new(0));
 
     let test_texts = vec![
-        ("おはようございます。", "안녕하세요"),  // Expected substring
+        ("おはようございます。", "안녕하세요"), // Expected substring
         ("こんにちは。", "안녕"),
         ("こんばんは。", "안녕"),
         ("ありがとうございます。", "감사"),
@@ -149,57 +165,65 @@ fn test_multithread_shared_engine() {
 
     let start = Instant::now();
 
-    let handles: Vec<_> = (0..num_threads).map(|thread_id| {
-        let engine = Arc::clone(&engine);
-        let barrier = Arc::clone(&barrier);
-        let success = Arc::clone(&success_count);
-        let errors = Arc::clone(&error_count);
-        let crashes = Arc::clone(&crash_count);
-        let corrupted = Arc::clone(&corrupted_count);
-        let texts = test_texts.clone();
+    let handles: Vec<_> = (0..num_threads)
+        .map(|thread_id| {
+            let engine = Arc::clone(&engine);
+            let barrier = Arc::clone(&barrier);
+            let success = Arc::clone(&success_count);
+            let errors = Arc::clone(&error_count);
+            let crashes = Arc::clone(&crash_count);
+            let corrupted = Arc::clone(&corrupted_count);
+            let texts = test_texts.clone();
 
-        thread::spawn(move || {
-            // Wait for all threads to be ready
-            barrier.wait();
+            thread::spawn(move || {
+                // Wait for all threads to be ready
+                barrier.wait();
 
-            for i in 0..iterations_per_thread {
-                let (text, expected_substr) = &texts[(thread_id * iterations_per_thread + i) % texts.len()];
+                for i in 0..iterations_per_thread {
+                    let (text, expected_substr) =
+                        &texts[(thread_id * iterations_per_thread + i) % texts.len()];
 
-                // Use catch_unwind to detect panics/crashes
-                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                    engine.0.translate_mmntw(text)
-                }));
+                    // Use catch_unwind to detect panics/crashes
+                    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                        engine.0.translate_mmntw(text)
+                    }));
 
-                match result {
-                    Ok(Ok(translated)) => {
-                        // Check for corruption
-                        if is_corrupted(text, &translated) {
-                            corrupted.fetch_add(1, Ordering::SeqCst);
-                            println!("  Thread {} CORRUPTED: '{}' -> '{}'", thread_id, text, translated);
-                        } else if !translated.contains(expected_substr) {
-                            // Output doesn't contain expected Korean
-                            corrupted.fetch_add(1, Ordering::SeqCst);
-                            println!("  Thread {} WRONG OUTPUT: '{}' -> '{}' (expected '{}')",
-                                thread_id, text, translated, expected_substr);
-                        } else {
-                            success.fetch_add(1, Ordering::SeqCst);
+                    match result {
+                        Ok(Ok(translated)) => {
+                            // Check for corruption
+                            if is_corrupted(text, &translated) {
+                                corrupted.fetch_add(1, Ordering::SeqCst);
+                                println!(
+                                    "  Thread {} CORRUPTED: '{}' -> '{}'",
+                                    thread_id, text, translated
+                                );
+                            } else if !translated.contains(expected_substr) {
+                                // Output doesn't contain expected Korean
+                                corrupted.fetch_add(1, Ordering::SeqCst);
+                                println!(
+                                    "  Thread {} WRONG OUTPUT: '{}' -> '{}' (expected '{}')",
+                                    thread_id, text, translated, expected_substr
+                                );
+                            } else {
+                                success.fetch_add(1, Ordering::SeqCst);
+                            }
+                        }
+                        Ok(Err(e)) => {
+                            errors.fetch_add(1, Ordering::SeqCst);
+                            println!("  Thread {} ERROR: {:?}", thread_id, e);
+                        }
+                        Err(_) => {
+                            crashes.fetch_add(1, Ordering::SeqCst);
+                            println!("  Thread {} CRASHED!", thread_id);
                         }
                     }
-                    Ok(Err(e)) => {
-                        errors.fetch_add(1, Ordering::SeqCst);
-                        println!("  Thread {} ERROR: {:?}", thread_id, e);
-                    }
-                    Err(_) => {
-                        crashes.fetch_add(1, Ordering::SeqCst);
-                        println!("  Thread {} CRASHED!", thread_id);
-                    }
-                }
 
-                // Small delay to increase chance of race conditions
-                thread::sleep(Duration::from_micros(50));
-            }
+                    // Small delay to increase chance of race conditions
+                    thread::sleep(Duration::from_micros(50));
+                }
+            })
         })
-    }).collect();
+        .collect();
 
     // Wait for all threads
     for handle in handles {
@@ -213,7 +237,10 @@ fn test_multithread_shared_engine() {
     let crashes = crash_count.load(Ordering::SeqCst);
     let corrupted = corrupted_count.load(Ordering::SeqCst);
 
-    println!("\nMulti-threaded Results ({} threads, {} total):", num_threads, total);
+    println!(
+        "\nMulti-threaded Results ({} threads, {} total):",
+        num_threads, total
+    );
     println!("  Success: {}", successes);
     println!("  Errors: {}", errors);
     println!("  Crashes: {}", crashes);
@@ -224,7 +251,10 @@ fn test_multithread_shared_engine() {
     if failure_count == 0 {
         println!("\n✓ DLL appears to be THREAD-SAFE in this run");
     } else {
-        println!("\n✗ DLL is NOT THREAD-SAFE ({} failures detected)", failure_count);
+        println!(
+            "\n✗ DLL is NOT THREAD-SAFE ({} failures detected)",
+            failure_count
+        );
     }
 }
 
@@ -241,7 +271,9 @@ fn test_multithread_with_mutex() {
 
     let (dll_path, dat_path) = get_engine_paths();
     let engine = EzTransEngine::new(&dll_path).expect("Failed to load DLL");
-    engine.initialize_ex("CSUSER123455", &dat_path).expect("Failed to initialize");
+    engine
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to initialize");
 
     let engine = Arc::new(Mutex::new(UnsafeEngineWrapper(engine)));
 
@@ -261,39 +293,41 @@ fn test_multithread_with_mutex() {
 
     let start = Instant::now();
 
-    let handles: Vec<_> = (0..num_threads).map(|thread_id| {
-        let engine = Arc::clone(&engine);
-        let barrier = Arc::clone(&barrier);
-        let success = Arc::clone(&success_count);
-        let errors = Arc::clone(&error_count);
-        let texts = test_texts.clone();
+    let handles: Vec<_> = (0..num_threads)
+        .map(|thread_id| {
+            let engine = Arc::clone(&engine);
+            let barrier = Arc::clone(&barrier);
+            let success = Arc::clone(&success_count);
+            let errors = Arc::clone(&error_count);
+            let texts = test_texts.clone();
 
-        thread::spawn(move || {
-            barrier.wait();
+            thread::spawn(move || {
+                barrier.wait();
 
-            for i in 0..iterations_per_thread {
-                let text = &texts[(thread_id + i) % texts.len()];
+                for i in 0..iterations_per_thread {
+                    let text = &texts[(thread_id + i) % texts.len()];
 
-                // Lock the mutex before accessing engine
-                let guard = engine.lock().unwrap();
-                match guard.0.translate_mmntw(text) {
-                    Ok(result) => {
-                        if !is_corrupted(text, &result) {
-                            success.fetch_add(1, Ordering::SeqCst);
-                        } else {
+                    // Lock the mutex before accessing engine
+                    let guard = engine.lock().unwrap();
+                    match guard.0.translate_mmntw(text) {
+                        Ok(result) => {
+                            if !is_corrupted(text, &result) {
+                                success.fetch_add(1, Ordering::SeqCst);
+                            } else {
+                                errors.fetch_add(1, Ordering::SeqCst);
+                                println!("  Thread {} CORRUPTED even with mutex!", thread_id);
+                            }
+                        }
+                        Err(e) => {
                             errors.fetch_add(1, Ordering::SeqCst);
-                            println!("  Thread {} CORRUPTED even with mutex!", thread_id);
+                            println!("  Thread {} ERROR: {:?}", thread_id, e);
                         }
                     }
-                    Err(e) => {
-                        errors.fetch_add(1, Ordering::SeqCst);
-                        println!("  Thread {} ERROR: {:?}", thread_id, e);
-                    }
+                    drop(guard); // Explicit unlock
                 }
-                drop(guard); // Explicit unlock
-            }
+            })
         })
-    }).collect();
+        .collect();
 
     for handle in handles {
         handle.join().unwrap();
@@ -308,7 +342,10 @@ fn test_multithread_with_mutex() {
     println!("  Success: {}/{}", successes, total);
     println!("  Errors: {}", errors);
     println!("  Time: {:?}", elapsed);
-    println!("  Rate: {:.1} translations/sec", total as f64 / elapsed.as_secs_f64());
+    println!(
+        "  Rate: {:.1} translations/sec",
+        total as f64 / elapsed.as_secs_f64()
+    );
 
     if errors == 0 {
         println!("\n✓ Mutex protection works correctly");
@@ -333,7 +370,9 @@ fn test_repeated_stress() {
     for round in 0..num_rounds {
         // Create fresh engine each round
         let engine = EzTransEngine::new(&dll_path).expect("Failed to load DLL");
-        engine.initialize_ex("CSUSER123455", &dat_path).expect("Failed to initialize");
+        engine
+            .initialize_ex("CSUSER123455", &dat_path)
+            .expect("Failed to initialize");
         let engine = Arc::new(UnsafeEngineWrapper(engine));
 
         let num_threads = 4;
@@ -342,26 +381,31 @@ fn test_repeated_stress() {
 
         let failures = Arc::new(AtomicUsize::new(0));
 
-        let handles: Vec<_> = (0..num_threads).map(|_| {
-            let engine = Arc::clone(&engine);
-            let barrier = Arc::clone(&barrier);
-            let failures = Arc::clone(&failures);
+        let handles: Vec<_> = (0..num_threads)
+            .map(|_| {
+                let engine = Arc::clone(&engine);
+                let barrier = Arc::clone(&barrier);
+                let failures = Arc::clone(&failures);
 
-            thread::spawn(move || {
-                barrier.wait();
+                thread::spawn(move || {
+                    barrier.wait();
 
-                for _ in 0..iterations {
-                    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                        engine.0.translate_mmntw("こんにちは")
-                    }));
+                    for _ in 0..iterations {
+                        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                            engine.0.translate_mmntw("こんにちは")
+                        }));
 
-                    match result {
-                        Ok(Ok(s)) if !is_corrupted("こんにちは", &s) && s.contains("안녕") => {}
-                        _ => { failures.fetch_add(1, Ordering::SeqCst); }
+                        match result {
+                            Ok(Ok(s)) if !is_corrupted("こんにちは", &s) && s.contains("안녕") =>
+                                {}
+                            _ => {
+                                failures.fetch_add(1, Ordering::SeqCst);
+                            }
+                        }
                     }
-                }
+                })
             })
-        }).collect();
+            .collect();
 
         for h in handles {
             let _ = h.join();
@@ -372,7 +416,12 @@ fn test_repeated_stress() {
         total_failures += round_failures;
         total_ops += round_ops;
 
-        println!("  Round {}: {}/{} failures", round + 1, round_failures, round_ops);
+        println!(
+            "  Round {}: {}/{} failures",
+            round + 1,
+            round_failures,
+            round_ops
+        );
 
         // Small delay between rounds
         thread::sleep(Duration::from_millis(100));
@@ -381,10 +430,16 @@ fn test_repeated_stress() {
     println!("\nTotal Results:");
     println!("  Operations: {}", total_ops);
     println!("  Failures: {}", total_failures);
-    println!("  Failure Rate: {:.2}%", total_failures as f64 / total_ops as f64 * 100.0);
+    println!(
+        "  Failure Rate: {:.2}%",
+        total_failures as f64 / total_ops as f64 * 100.0
+    );
 
     if total_failures > 0 {
-        println!("\n✗ DLL is NOT THREAD-SAFE ({} failures across {} rounds)", total_failures, num_rounds);
+        println!(
+            "\n✗ DLL is NOT THREAD-SAFE ({} failures across {} rounds)",
+            total_failures, num_rounds
+        );
     } else {
         println!("\n? No failures detected (may need more iterations)");
     }
@@ -401,7 +456,9 @@ fn test_rapid_fire() {
 
     let (dll_path, dat_path) = get_engine_paths();
     let engine = EzTransEngine::new(&dll_path).expect("Failed to load DLL");
-    engine.initialize_ex("CSUSER123455", &dat_path).expect("Failed to initialize");
+    engine
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to initialize");
 
     let engine = Arc::new(UnsafeEngineWrapper(engine));
 
@@ -414,37 +471,43 @@ fn test_rapid_fire() {
 
     let start = Instant::now();
 
-    let handles: Vec<_> = (0..num_threads).map(|thread_id| {
-        let engine = Arc::clone(&engine);
-        let barrier = Arc::clone(&barrier);
-        let success = Arc::clone(&success);
-        let fail = Arc::clone(&fail);
+    let handles: Vec<_> = (0..num_threads)
+        .map(|thread_id| {
+            let engine = Arc::clone(&engine);
+            let barrier = Arc::clone(&barrier);
+            let success = Arc::clone(&success);
+            let fail = Arc::clone(&fail);
 
-        thread::spawn(move || {
-            barrier.wait();
+            thread::spawn(move || {
+                barrier.wait();
 
-            for i in 0..iterations_per_thread {
-                let text = if i % 2 == 0 { "おはよう" } else { "こんにちは" };
+                for i in 0..iterations_per_thread {
+                    let text = if i % 2 == 0 {
+                        "おはよう"
+                    } else {
+                        "こんにちは"
+                    };
 
-                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-                    engine.0.translate_mmntw(text)
-                }));
+                    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                        engine.0.translate_mmntw(text)
+                    }));
 
-                match result {
-                    Ok(Ok(r)) if !r.is_empty() && !is_corrupted(text, &r) => {
-                        success.fetch_add(1, Ordering::SeqCst);
-                    }
-                    _ => {
-                        fail.fetch_add(1, Ordering::SeqCst);
-                        if fail.load(Ordering::SeqCst) <= 10 {
-                            println!("  Thread {} iteration {} failed", thread_id, i);
+                    match result {
+                        Ok(Ok(r)) if !r.is_empty() && !is_corrupted(text, &r) => {
+                            success.fetch_add(1, Ordering::SeqCst);
+                        }
+                        _ => {
+                            fail.fetch_add(1, Ordering::SeqCst);
+                            if fail.load(Ordering::SeqCst) <= 10 {
+                                println!("  Thread {} iteration {} failed", thread_id, i);
+                            }
                         }
                     }
+                    // NO DELAY - maximum contention
                 }
-                // NO DELAY - maximum contention
-            }
+            })
         })
-    }).collect();
+        .collect();
 
     for h in handles {
         let _ = h.join();
@@ -460,7 +523,10 @@ fn test_rapid_fire() {
     println!("  Success: {}", successes);
     println!("  Failures: {}", failures);
     println!("  Time: {:?}", elapsed);
-    println!("  Rate: {:.1} ops/sec", total as f64 / elapsed.as_secs_f64());
+    println!(
+        "  Rate: {:.1} ops/sec",
+        total as f64 / elapsed.as_secs_f64()
+    );
 
     let failure_rate = failures as f64 / total as f64 * 100.0;
     println!("\nFailure Rate: {:.1}%", failure_rate);
@@ -485,7 +551,9 @@ fn test_memory_corruption() {
 
     let (dll_path, dat_path) = get_engine_paths();
     let engine = EzTransEngine::new(&dll_path).expect("Failed to load DLL");
-    engine.initialize_ex("CSUSER123455", &dat_path).expect("Failed to initialize");
+    engine
+        .initialize_ex("CSUSER123455", &dat_path)
+        .expect("Failed to initialize");
 
     let engine = Arc::new(UnsafeEngineWrapper(engine));
 
